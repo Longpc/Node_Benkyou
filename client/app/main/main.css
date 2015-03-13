@@ -39,3 +39,16 @@ ul.nav.nav-tabs {
 ul.nav.nav-tabs img {
     width: 100%;
 }
+
+#email {
+    width: 100%;
+}
+
+table td input {
+    color: #000000;
+}
+
+a.btn.btn-default {
+    width: 100%;
+    margin-top: 50px;
+}

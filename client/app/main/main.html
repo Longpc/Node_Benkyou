@@ -4,11 +4,11 @@
   <div class="container">
     <div class="right" id="login">
       <form>
-        <input type="email" name="email" placeholder="ishitsuka.jun@gmail.com">
+        <input type="email" name="email" id="email" placeholder="ishitsuka.jun@gmail.com" ng-model="email">
         <table>
           <tr>
-            <td><input type="password" name="password" placeholder="Password"></td>
-            <td><input type="submit" value="ログイン"></td>
+            <td><input type="password" name="password" placeholder="password" ng-model="password"></td>
+            <td><input type="submit" value="ログイン" ng-click="userLogin()"></td>
           </tr>
         </table>
       </form>

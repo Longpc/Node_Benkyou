@@ -13,6 +13,7 @@
     <label for="email" class="col-md-3">Email</label>
     <div class="col-md-9">
       <input type="email" name"email" class="form-control" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="newUser.email" required>
+      <span class="unique error" ng-show="emailError">そのメールアドレスは既に登録されています</span>
     </div>
   </div>
 

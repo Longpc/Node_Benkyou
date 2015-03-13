@@ -29,6 +29,8 @@ var all = {
     session: 'shufflelunch-secret'
   },
 
+  session_timeout: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000), // for a week
+
   // List of user roles
   userRoles: ['guest', 'user', 'admin'],
 
