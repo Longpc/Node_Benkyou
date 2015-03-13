@@ -7,6 +7,7 @@ angular.module('shufflelunchApp')
   .controller('NewCtrl', function ($scope, $location, $http, socket) {
     $scope.message = 'New';
     $scope.departments = [];
+    $scope.occupations = [];
 
     $http.get('/api/departments').success(function(departments) {
       $scope.departments = departments;
@@ -22,8 +23,20 @@ angular.module('shufflelunchApp')
       if($scope.newUser === '') {
         return;
       }
-      $http.post('/api/users', $scope.newUser).success(function(){
-        $location.path('/users');
+      $http.post('/api/users', $scope.newUser)
+        .success(function() {
+          $location.path('/users');
+        })
+        .error(function(err) {
+          if (err.code == 11000) {
+            $scope.emailError = true;
+          }
+        });
+    };
+
+    $scope.userLogout = function() {
+      $http.post('/api/users/logout').success(function() {
+         $location.path('/');
       });
     };
 

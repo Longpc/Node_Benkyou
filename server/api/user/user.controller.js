@@ -26,6 +26,7 @@ exports.create = function(req, res) {
   req.body.password = createHash(req.body.password)
   User.create(req.body, function(err, user) {
     if(err) { return handleError(res, err); }
+    req.session.user = user;
     return res.json(201, user);
   });
 };
@@ -54,6 +55,30 @@ exports.destroy = function(req, res) {
       return res.send(204);
     });
   });
+};
+
+exports.islogged = function(req, res) {
+  var user = req.session.user;
+  if (!user) {
+    user = req.session.user = {};
+    return res.json(200, 'fail');
+  }
+  return res.json(200, 'success');
+};
+
+exports.login = function(req, res) {
+  User.find({email: req.body.email, password: createHash(req.body.password)}, function(err, user) {
+    if (user != '') {
+      req.session.user = user;
+      return res.json(200, 'success');
+    }
+    return res.json(200, 'fail');
+  });
+};
+
+exports.logout = function(req, res) {
+  req.session.destroy();
+  return res.json(200, 'success');
 };
 
 function handleError(res, err) {
