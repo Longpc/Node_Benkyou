@@ -5,8 +5,12 @@ var mongoose = require('mongoose'),
 
 var UserSchema = new Schema({
   name: String,
-  info: String,
-  active: Boolean
+  email: {type: String, unique: true},
+  password: String,
+  department: String,
+  sex: String,
+  occupation: String,
+  group_ids: Array
 });
 
 module.exports = mongoose.model('User', UserSchema);

@@ -1,5 +1,6 @@
 'use strict';
 
+var crypto = require('crypto');
 var _ = require('lodash');
 var User = require('./user.model');
 
@@ -22,6 +23,7 @@ exports.show = function(req, res) {
 
 // Creates a new user in the DB.
 exports.create = function(req, res) {
+  req.body.password = createHash(req.body.password)
   User.create(req.body, function(err, user) {
     if(err) { return handleError(res, err); }
     return res.json(201, user);
@@ -56,4 +58,11 @@ exports.destroy = function(req, res) {
 
 function handleError(res, err) {
   return res.send(500, err);
+}
+
+function createHash(password) {
+  var planeText = 'Plane Text';
+  var cipher = crypto.createCipher('aes192', password);
+  cipher.update(planeText, 'utf8', 'hex');
+  return cipher.final('hex');
 }
