@@ -23,8 +23,8 @@ exports.show = function(req, res) {
 
 // Creates a new user in the DB.
 exports.create = function(req, res) {
-  User.find({email: req.body.email}, function(err, user) {
-    if (user != '') {
+  User.findOne({email: req.body.email}, function(err, user) {
+    if (user) {
       return res.json(200, 'email_duplicated');
     }
 
@@ -40,12 +40,15 @@ exports.create = function(req, res) {
 // Updates an existing user in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  User.findById(req.params.id, function (err, user) {
+  req.body.password = createHash(req.body.password);
+
+  User.findOne({_id: req.params.id, password: req.body.password}, function (err, user) {
     if (err) { return handleError(res, err); }
-    if(!user) { return res.send(404); }
+    if (!user) { return res.json(200, 'wrong_password'); }
     var updated = _.merge(user, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
+      req.session.user = user;
       return res.json(200, user);
     });
   });
@@ -65,20 +68,20 @@ exports.destroy = function(req, res) {
 
 exports.islogged = function(req, res) {
   var user = req.session.user;
-  if (!user) {
+  if (user == '') {
     user = req.session.user = {};
-    return res.json(200, 'fail');
+    return res.json(200);
   }
-  return res.json(200, 'success');
+  return res.json(200, user);
 };
 
 exports.login = function(req, res) {
-  User.find({email: req.body.email, password: createHash(req.body.password)}, function(err, user) {
-    if (user != '') {
+  User.findOne({email: req.body.email, password: createHash(req.body.password)}, function(err, user) {
+    if (user) {
       req.session.user = user;
-      return res.json(200, 'success');
+      return res.json(200, user);
     }
-    return res.json(200, 'fail');
+    return res.json(200, '');
   });
 };
 

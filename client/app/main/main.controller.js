@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('MainCtrl', function ($scope, $location, $http, socket) {
+  .controller('MainCtrl', function ($scope, $location, $http, socket, $cookieStore) {
     $scope.awesomeThings = [];
 
     $http.get('/api/things').success(function(awesomeThings) {
@@ -10,11 +10,14 @@ angular.module('shufflelunchApp')
     });
 
     $scope.userLogin = function() {
-      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(status) {
-        if (status == 'success') {
-          $location.path('/users');
+      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(user) {
+        if (user != '') {
+          delete user['password'];
+          $cookieStore.put('user', user);
+          return $location.path('/users');
         } else {
-          $scope.password = '';
+          $scope.loginFailed = true;
+          return $scope.password = '';
         }
       });
     };
