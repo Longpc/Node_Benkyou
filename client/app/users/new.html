@@ -1,7 +1,7 @@
 <div class="col-md-12">
 <h1>新規ユーザー登録</h1>
 
-<form class="form-horizontal" ng-controller="NewCtrl">
+<form class="form-horizontal" ng-controller="NewCtrl" ng-submit="createUser()">
   <div class="form-group">
     <label for="name" class="col-md-3">名前</label>
     <div class="col-md-9">
@@ -13,7 +13,7 @@
     <label for="email" class="col-md-3">Email</label>
     <div class="col-md-9">
       <input type="email" name"email" class="form-control" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="newUser.email" required>
-      <span class="unique error" ng-show="emailError">そのメールアドレスは既に登録されています</span>
+      <span class="unique error" ng-show="emailDuplicated">そのメールアドレスは既に登録されています</span>
     </div>
   </div>
 
@@ -61,7 +61,7 @@
   <!--   </div> -->
   <!-- </div> -->
 
-  <input class="btn btn-default" type="submit" value="新規登録" ng-click="createUser()">
+  <input class="btn btn-default" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
 
 </form>
 </div>

@@ -3,14 +3,15 @@
 <header class="hero-unit" id="banner">
   <div class="container">
     <div class="right" id="login">
-      <form>
-        <input type="email" name="email" id="email" placeholder="ishitsuka.jun@gmail.com" ng-model="email">
+      <form name="loginForm" class="form-horizontal" ng-submit="userLogin()">
+        <input type="email" id="email" placeholder="ishitsuka.jun@gmail.com" ng-model="email" required>
         <table>
           <tr>
-            <td><input type="password" name="password" placeholder="password" ng-model="password"></td>
-            <td><input type="submit" value="ログイン" ng-click="userLogin()"></td>
+            <td><input type="password" placeholder="password" ng-model="password" required></td>
+            <td><input type="submit" value="ログイン" ng-disabled="loginForm.$invalid"></td>
           </tr>
         </table>
+        <span class="unique error" ng-show="loginFailed">メールアドレスかパスワードが間違っています</span>
       </form>
       <a class="btn btn-default" href="users/new" role="button">新規登録</a>
     </div>

@@ -1,11 +1,64 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('UsersCtrl', function ($scope) {
-    $scope.message = 'Hello';
+  .service('formService', function() {
+    this.formCreate = createFormParts;
   })
-  .controller('NewCtrl', function ($scope, $location, $http, socket) {
-    $scope.message = 'New';
+
+  .controller('UsersCtrl', function ($scope, $cookieStore) {
+    var user = $cookieStore.get('user');
+    $scope.user = user;
+  })
+
+  .controller('NewCtrl', function ($scope, $location, $http, socket, $cookieStore, formService) {
+    formService.formCreate($scope, $http, socket);
+
+    $scope.createUser = function() {
+      if($scope.newUser === '') {
+        return;
+      }
+      $http.post('/api/users', $scope.newUser)
+        .success(function(user) {
+          if (user == 'email_duplicated') {
+            return $scope.emailDuplicated = true;
+          }
+
+          delete user['password'];
+          $cookieStore.put('user', user)
+          return $location.path('/users');
+        });
+    };
+
+    $scope.userLogout = function() {
+      $http.post('/api/users/logout').success(function() {
+         return $location.path('/');
+      });
+    };
+  })
+
+  .controller('EditCtrl', function($scope, $location, $http, socket, $cookieStore, formService) {
+    formService.formCreate($scope, $http, socket);
+
+    var user = $cookieStore.get('user');
+    $scope.loginUser = user;
+
+    $scope.updateUser = function() {
+      if ($scope.updateUser === '') {
+        return;
+      }
+      $http.put('/api/users/' + user['_id'], $scope.loginUser)
+        .success(function(user) {
+          if (user == 'wrong_password') {
+            return $scope.wrongPassword = true;
+          }
+          delete user['password'];
+          $cookieStore.put('user', user)
+          return $location.path('/users');
+        });
+    };
+  });
+
+var createFormParts = function($scope, $http, socket) {
     $scope.departments = [];
     $scope.occupations = [];
 
@@ -19,25 +72,5 @@ angular.module('shufflelunchApp')
       socket.syncUpdates('occupations', $scope.occupations);
     });
 
-    $scope.createUser = function() {
-      if($scope.newUser === '') {
-        return;
-      }
-      $http.post('/api/users', $scope.newUser)
-        .success(function() {
-          $location.path('/users');
-        })
-        .error(function(err) {
-          if (err.code == 11000) {
-            $scope.emailError = true;
-          }
-        });
-    };
-
-    $scope.userLogout = function() {
-      $http.post('/api/users/logout').success(function() {
-         $location.path('/');
-      });
-    };
-
-  });
+    return;
+};
