@@ -24,13 +24,12 @@ angular.module('shufflelunchApp')
         return;
       }
       $http.post('/api/users', $scope.newUser)
-        .success(function() {
-          $location.path('/users');
-        })
-        .error(function(err) {
-          if (err.code == 11000) {
-            $scope.emailError = true;
+        .success(function(status) {
+          if (status == 'email_duplicated') {
+            $scope.emailDuplicated = true;
+            return;
           }
+          $location.path('/users');
         });
     };
 

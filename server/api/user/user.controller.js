@@ -23,11 +23,17 @@ exports.show = function(req, res) {
 
 // Creates a new user in the DB.
 exports.create = function(req, res) {
-  req.body.password = createHash(req.body.password)
-  User.create(req.body, function(err, user) {
-    if(err) { return handleError(res, err); }
-    req.session.user = user;
-    return res.json(201, user);
+  User.find({email: req.body.email}, function(err, user) {
+    if (user != '') {
+      return res.json(200, 'email_duplicated');
+    }
+
+    req.body.password = createHash(req.body.password);
+    User.create(req.body, function(err, user) {
+      if(err) { return handleError(res, err); }
+      req.session.user = user;
+      return res.json(201, user);
+    });
   });
 };
 
