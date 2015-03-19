@@ -19,7 +19,10 @@
     "connect-mongo": "^0.4.1",
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
-    "socketio-jwt": "^2.0.2"
+    "socketio-jwt": "^2.0.2",
+    "batch": "0.5.2",
+    "commander": "2.7.1",
+    "faker": "2.1.2"
   },
   "devDependencies": {
     "connect-livereload": "~0.4.0",

@@ -5,6 +5,9 @@
 #banner {
     border-bottom: none;
     margin-top: -20px;
+    background: url('../../assets/images/cafe_dark.jpg');
+    background-size: cover;
+    height: 550px;
 }
 
 #banner h1 {
@@ -27,4 +30,25 @@
     padding: 30px 0;
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
+}
+
+ul.nav.nav-tabs {
+    margin-right: 20px;
+}
+
+ul.nav.nav-tabs img {
+    width: 100%;
+}
+
+#email {
+    width: 100%;
+}
+
+.right input {
+    color: #000000;
+}
+
+a.btn.btn-default {
+    width: 100%;
+    margin-top: 50px;
 }

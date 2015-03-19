@@ -1,0 +1,67 @@
+<div class="col-md-12">
+<h1>新規ユーザー登録</h1>
+
+<form class="form-horizontal" ng-controller="NewCtrl" ng-submit="createUser()">
+  <div class="form-group">
+    <label for="name" class="col-md-3">名前</label>
+    <div class="col-md-9">
+      <input type="text" name="name" class="form-control" id="name" placeholder="石塚淳" ng-model="newUser.name" required>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email" class="col-md-3">Email</label>
+    <div class="col-md-9">
+      <input type="email" name"email" class="form-control" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="newUser.email" required>
+      <span class="unique error" ng-show="emailDuplicated">そのメールアドレスは既に登録されています</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sex" class="col-md-3">性別</label>
+    <div class="col-md-9">
+      <label class="radio-inline">
+        <input type="radio" name="sex" value="男性" id="male" ng-model="newUser.sex" required> 男性
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="sex" value="女性" id="female" ng-model="newUser.sex" required> 女性
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sex" class="col-md-3">部署</label>
+    <div class="col-md-9">
+      <label class="radio-inline" ng-repeat="depart in departments">
+        <input type="radio" name="department" value="{{depart.name}}" id="{{depart.english_name}}" ng-model="newUser.department" required>{{depart.name}}
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="sex" class="col-md-3">職種</label>
+    <div class="col-md-9">
+      <label class="radio-inline" ng-repeat="occ in occupations">
+        <input type="radio" name="occupation" value="{{occ.name}}" id="{{occ.english_name}}" ng-model="newUser.occupation" required>{{occ.name}}
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password" class="col-md-3">パスワード</label>
+    <div class="col-md-9">
+      <input type="password" name="password" class="form-control" id="password" ng-model="newUser.password" required>
+    </div>
+  </div>
+
+  <!-- <div class="form&#45;group"> -->
+  <!--   <label for="password" class="col&#45;md&#45;3">パスワードの確認</label> -->
+  <!--   <div class="col&#45;md&#45;9"> -->
+  <!--     <input type="password" name="password_confirmation" class="form&#45;control" id="password_confirmation"> -->
+  <!--   </div> -->
+  <!-- </div> -->
+
+  <input class="btn btn-default" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
+
+</form>
+</div>
