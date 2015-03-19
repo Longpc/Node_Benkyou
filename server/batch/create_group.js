@@ -1,18 +1,19 @@
 // グループ作成の流れ
-// 参加するユーザ一覧を取得
-// ランダムに100通りの組合せを作成
-// 関数を作成し, 組合せのコストを計算
+// 1. 参加するユーザ一覧を取得
+// 2. ランダムに100通りの組合せを作成
+// 3. 関数を作成し, 組合せのコストを計算
 // (メモリを考えると1ずつ通り生成してコスト計算していった方がよい)
-// 最小のコストの組合せを選択
+// 4. 最小のコストの組合せを選択
+// node create_group.js
 
+console.log('start');
 
 var batch = require('../batch.js');
 var User = require('../api/user/user.model');
 var Group = require('../api/group/group.model');
+
 const n = 100;
 const member = 5;
-
-console.log('start');
 
 // 参加するユーザ一覧を取得
 // Todo: 参加するユーザーのみに絞り込む必要あり
@@ -23,7 +24,7 @@ User.find({}, null, { timeout: false }, function(err, users) {
     var cost = 0;
     groups = createRandomGroup(users); // blocking function
     groups.forEach(function(group) {
-      cost += calcCostByGroup(group);
+      cost += calcCostByGroup(group); // blocking function
     });
     if (cost < minCost) {
       minCost = cost;
@@ -36,7 +37,6 @@ User.find({}, null, { timeout: false }, function(err, users) {
     var user_ids = bg.map(function(v) { return v.id; });
     var write_blog = (i == 0) ? true : false;
     var date = new Date();
-    console.log(date);
     newGroup = {
       date: date,
       write_blog: write_blog,
@@ -44,14 +44,13 @@ User.find({}, null, { timeout: false }, function(err, users) {
     };
     Group.create(newGroup, function(err, group) {
       if (err) { console.log(err); }
+      console.log('group created');
       User.update({_id: {$in: user_ids}}, {$push: {group_ids: group.id}}, {multi: true}, function(err, user){
         if (err) { console.log(err); }
       });
     });
   });
 });
-
-console.log('finish');
 
 // ユーザーをシャッフルした後, 最後から5人ずつグループを作成していく
 // ユーザーが5人未満になったら, すでにできているグループに1人ずつ追加していく
