@@ -1,20 +1,11 @@
 var Occupation = require('../../api/occupation/occupation.model');
+var config = require('../environment');
 
 Occupation.find({}).remove(function() {
-  Occupation.create({
-    name : '役員・部長・室長',
-    english_name : 'executive'
-  }, {
-    name : 'デザイナー',
-    english_name : 'designer'
-  }, {
-    name : 'クライアントエンジニア',
-    english_name : 'client'
-  },  {
-    name : 'サーバーエンジニア',
-    english_name : 'server'
-  },  {
-    name : '総合職',
-    english_name : 'general'
-  });
+  config.occupation.forEach(function(oc) {
+    Occupation.create({
+      name: oc.name,
+      english_name: oc.english_name,
+    });
+  })
 });
