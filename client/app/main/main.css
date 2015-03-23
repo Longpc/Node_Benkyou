@@ -34,10 +34,11 @@
 
 ul.nav.nav-tabs {
     margin-right: 20px;
+    text-align: center;
 }
 
 ul.nav.nav-tabs img {
-    width: 100%;
+    width: 50%;
 }
 
 #email {
@@ -51,4 +52,9 @@ ul.nav.nav-tabs img {
 a.btn.btn-default {
     width: 100%;
     margin-top: 50px;
+}
+
+h2.page-header {
+    text-align: center;
+    margin: 70px 0 35px 0;
 }
