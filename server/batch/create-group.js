@@ -8,7 +8,7 @@
 
 console.log('start');
 
-var batch = require('../batch');
+var batch = require('../batch').batch;
 var User = require('../api/user/user.model');
 var Group = require('../api/group/group.model');
 
