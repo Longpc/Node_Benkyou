@@ -1,5 +1,7 @@
-<div class="col-md-12">
-<h1>新規ユーザー登録</h1>
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="col-md-12 user">
+<h1>シャッフルランチへようこそ！</h1>
 
 <form class="form-horizontal" ng-controller="NewCtrl" ng-submit="createUser()">
   <div class="form-group">
@@ -30,7 +32,7 @@
   </div>
 
   <div class="form-group">
-    <label for="sex" class="col-md-3">部署</label>
+    <label for="department" class="col-md-3">部署</label>
     <div class="col-md-9">
       <label class="radio-inline" ng-repeat="depart in departments">
         <input type="radio" name="department" value="{{depart.name}}" id="{{depart.english_name}}" ng-model="newUser.department" required>{{depart.name}}
@@ -39,7 +41,7 @@
   </div>
 
   <div class="form-group">
-    <label for="sex" class="col-md-3">職種</label>
+    <label for="occupation" class="col-md-3">職種</label>
     <div class="col-md-9">
       <label class="radio-inline" ng-repeat="occ in occupations">
         <input type="radio" name="occupation" value="{{occ.name}}" id="{{occ.english_name}}" ng-model="newUser.occupation" required>{{occ.name}}
@@ -54,14 +56,17 @@
     </div>
   </div>
 
-  <!-- <div class="form&#45;group"> -->
-  <!--   <label for="password" class="col&#45;md&#45;3">パスワードの確認</label> -->
-  <!--   <div class="col&#45;md&#45;9"> -->
-  <!--     <input type="password" name="password_confirmation" class="form&#45;control" id="password_confirmation"> -->
-  <!--   </div> -->
-  <!-- </div> -->
+  <div class="form-group">
+    <label for="confirm" class="col-md-3">パスワードの確認</label>
+    <div class="col-md-9">
+      <input type="password" name="confirm" class="form-control" id="confirm" ng-model="confirm" required>
+      <span class="error" ng-show="wrongPassword">パスワードが一致していません</span>
+    </div>
+  </div>
 
-  <input class="btn btn-default" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
+  <div class="submit">
+    <input class="btn btn-default" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
+  </div>
 
 </form>
 </div>
