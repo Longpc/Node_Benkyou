@@ -1,0 +1,22 @@
+.user h1 {
+    margin: 50px 0 60px 30px;
+}
+
+.user form {
+    margin: 0 60px 0 60px;
+}
+
+.user input.btn {
+    width: 60%;
+    height: 50px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.user .form-group {
+    margin-top: 30px;
+}
+
+.user .submit {
+    text-align: center;
+}

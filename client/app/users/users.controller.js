@@ -14,9 +14,10 @@ angular.module('shufflelunchApp')
     formService.formCreate($scope, $http, socket);
 
     $scope.createUser = function() {
-      if($scope.newUser === '') {
-        return;
-      }
+      if ($scope.newUser === '') { return; }
+      if ($scope.newUser.password != $scope.confirm) { return $scope.wrongPassword = true; }
+      $scope.wrongPassword = false;
+
       $http.post('/api/users', $scope.newUser)
         .success(function(user) {
           if (user == 'email_duplicated') {
