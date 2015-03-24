@@ -14,7 +14,7 @@ Thing.find({}).remove(function() {
     name : '実際にランチ',
     image_path : 'assets/images/icon_lunch.png'
   },  {
-    name : '共有係（全体で１月に１人）はシャッフルランチの様子をアップ',
+    name : '共有係（全体で１月に１人）はランチの様子をアップ',
     image_path : 'assets/images/icon_upload.png'
   });
 });
