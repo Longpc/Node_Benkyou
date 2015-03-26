@@ -8,6 +8,63 @@ angular.module('shufflelunchApp')
   .controller('UsersCtrl', function ($scope, $cookieStore) {
     var user = $cookieStore.get('user');
     $scope.user = user;
+
+    var flg = "def";
+
+    var date;
+    date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
+    var date_obj = new Date(year,month+1,day);
+
+    $scope.awesomeThings = [];
+
+    $scope.next_month = month+1;
+    $scope.this_month = month;
+
+    $http.put('api/attends/550a7025155b7def0d3378f8',{
+      date: date_obj,
+    });
+
+    $http.get('/api/attends').success(function(){
+    $scope.pictures = [{name:'写真1'},{name:'写真2'},{name:'写真3'}];
+    });
+
+    $http.get('/api/attends').success(function(readers){
+    $scope.readers = readers;
+    });
+
+    $http.get('/api/attends').success(function(members){
+    $scope.members = members;
+    });
+
+
+    $scope.addDate = function(){
+      console.log(date);
+      if(flg=="def"){
+        $http.put('api/attends/550a7025155b7def0d3378f8',{
+          date:'',
+        });
+
+        flg = "ch";
+        //console.log("ch:不参加");
+        return;
+      } else  {
+        $http.put('api/attends/550a7025155b7def0d3378f8',{
+          date: date_obj,
+        });
+      }
+
+      flg = "def";
+      //console.log("def:参加");
+
+    };
+
+    $scope.$on('$destroy', function () {
+      socket.unsyncUpdates('attend');
+    });
+
   })
 
   .controller('NewCtrl', function ($scope, $location, $http, socket, $cookieStore, formService) {

@@ -2,8 +2,12 @@
 
 angular.module('shufflelunchApp')
   .controller('NavbarCtrl', function ($scope, $location) {
-    $scope.menu = [{
-      'title': 'Home',
+    $scope.menu1 = [{
+      'title': 'プロフィール編集',
+      'link': '/'
+    }];
+    $scope.menu2 = [{
+      'title': 'ログアウト',
       'link': '/'
     }];
 

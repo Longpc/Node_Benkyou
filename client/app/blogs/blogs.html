@@ -1,0 +1,38 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+   <div class="row">
+      <div class="col-xs-12">
+         <form class="blog-form" method="post">
+            <p><input type="month" name="example" ng-model="newcal"  required></p>
+            <p>記事内容</p>
+            <textarea id="kanso" name="" cols="100" rows="10" maxlength="1000" ng-model="newThing"  placeholder="今回のシャッフルランチはどうでしたか"></textarea>
+            <p><input type="file" id="file"  name="file1" ng-file-select="upload($files)"></p>
+            <p><img src="" id="preview" style="display:none;"></p>
+            <button class="btn btn-default btn-block" ng-click="addBlog()">投稿する</button>
+         </form>
+
+         <div>
+            <h1>結果</h1>
+            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="blog in awesomeThings">
+               <a href="#">{{blog.comment}}<button type="button" class="close" ng-click="deleteThing(blog)">&times;</button></a>
+            </ul>
+         </div>
+      </div>
+   </div>
+      <script>
+         $('#file').change(
+            function() {
+               if ( !this.files.length ) {
+                  return;
+               }
+               var file = $(this).prop('files')[0];
+               var fr = new FileReader();
+               fr.onload = function() {
+                  $('#preview').attr('src', fr.result ).css('display','inline');
+               }
+               fr.readAsDataURL(file);
+            }
+         );
+      </script>
+</div>
