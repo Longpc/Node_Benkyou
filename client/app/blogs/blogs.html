@@ -1,38 +1,42 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-   <div class="row">
-      <div class="col-xs-12">
-         <form class="blog-form" method="post">
-            <p><input type="month" name="example" ng-model="newcal"  required></p>
-            <p>記事内容</p>
-            <textarea id="kanso" name="" cols="100" rows="10" maxlength="1000" ng-model="newThing"  placeholder="今回のシャッフルランチはどうでしたか"></textarea>
-            <p><input type="file" id="file"  name="file1" ng-file-select="upload($files)"></p>
-            <p><img src="" id="preview" style="display:none;"></p>
-            <button class="btn btn-default btn-block" ng-click="addBlog()">投稿する</button>
-         </form>
+  <div class="row">
+    <div class="col-xs-12" ng-controller="BlogsCtrl">
+      <form method="post" action="/api/blogs" class="form-horizontal blog-form" ng-upload="uploadComplete(content)" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="date" class="col-md-3">日付</label>
+          <div class="col-md-9">
+            <input type="date" name="date" class="form-control" id="date" ng-model="newBlog.date" required>
+          </div>
+        </div>
 
-         <div>
-            <h1>結果</h1>
-            <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="blog in awesomeThings">
-               <a href="#">{{blog.comment}}<button type="button" class="close" ng-click="deleteThing(blog)">&times;</button></a>
-            </ul>
-         </div>
-      </div>
-   </div>
-      <script>
-         $('#file').change(
-            function() {
-               if ( !this.files.length ) {
-                  return;
-               }
-               var file = $(this).prop('files')[0];
-               var fr = new FileReader();
-               fr.onload = function() {
-                  $('#preview').attr('src', fr.result ).css('display','inline');
-               }
-               fr.readAsDataURL(file);
-            }
-         );
-      </script>
+        <div class="form-group">
+          <label for="place" class="col-md-3">店名</label>
+          <div class="col-md-9">
+            <input type="text" name="place" class="form-control" id="place" ng-model="newBlog.place" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comment" class="col-md-3">記事内容</label>
+          <div class="col-md-9">
+            <textarea id="comment" name="comment" cols="100" rows="10" maxlength="1000" ng-model="newBlog.comment"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="col-md-3">画像</label>
+          <div class="col-md-9">
+            <input type="file" name="file" id="image" ng-model="newBlog.image" required>
+          </div>
+        </div>
+
+        <div class="submit">
+          <input upload-submit="" class="btn btn-default" type="submit" value="投稿する" ng-disabled="$isUploading">
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>

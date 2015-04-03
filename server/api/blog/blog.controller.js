@@ -1,6 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
+var multiparty = require('multiparty');
+var fs = require('fs')
 var Blog = require('./blog.model');
 
 // Get list of blogs
@@ -22,9 +24,34 @@ exports.show = function(req, res) {
 
 // Creates a new blog in the DB.
 exports.create = function(req, res) {
-  Blog.create(req.body, function(err, blog) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, blog);
+  var form = new multiparty.Form();
+  form.parse(req, function(err, fields, files) {
+    if (err) { return handleError(res, err); }
+
+    files.file.forEach(function(file) {
+      var dir = file.path.split('/');
+      var filename = dir[dir.length - 1];
+      var newPath = 'client/assets/images/blogs/' + filename;
+
+      fs.rename(file.path, newPath, function(err) {
+        if (err) { return handleError(res, err); }
+
+        var blogData = {
+          date: fields.date,
+          place: fields.place,
+          comment: fields.comment,
+          image_path: '/assets/images/blogs/' + filename,
+          // user_id: '',
+          // group_id: ''
+        };
+
+        Blog.create(blogData, function(err, blog) {
+          console.log(err);
+          if(err) { return handleError(res, err); }
+          return res.json(201, blog);
+        });
+      });
+    });
   });
 };
 
