@@ -5,66 +5,32 @@ angular.module('shufflelunchApp')
     this.formCreate = createFormParts;
   })
 
-  .controller('UsersCtrl', function ($scope, $cookieStore) {
+  .controller('UsersCtrl', function ($scope, $http, $cookieStore) {
     var user = $cookieStore.get('user');
     $scope.user = user;
 
-    var flg = "def";
+    // Todo: httpリクエストを投げて参加状況を取得する
+    $scope.attendStatus = '参加';
 
-    var date;
-    date = new Date();
-    var year = date.getFullYear();
+    var date = new Date();
     var month = date.getMonth();
-    var day = date.getDate();
-    var date_obj = new Date(year,month+1,day);
+    $scope.nextMonth = month + 1;
+    $scope.thisMonth = month;
 
-    $scope.awesomeThings = [];
+    // Todo: これらの値もhttpで取得
+    $scope.blogs = [{name:'写真1'},{name:'写真2'},{name:'写真3'}];
+    $scope.leader = {name: 'kobayashi'};
+    $scope.members = [{name:'kobayashi'},{name:'tanei'},{name:'kokubo'}];
 
-    $scope.next_month = month+1;
-    $scope.this_month = month;
-
-    $http.put('api/attends/550a7025155b7def0d3378f8',{
-      date: date_obj,
-    });
-
-    $http.get('/api/attends').success(function(){
-    $scope.pictures = [{name:'写真1'},{name:'写真2'},{name:'写真3'}];
-    });
-
-    $http.get('/api/attends').success(function(readers){
-    $scope.readers = readers;
-    });
-
-    $http.get('/api/attends').success(function(members){
-    $scope.members = members;
-    });
-
-
-    $scope.addDate = function(){
-      console.log(date);
-      if(flg=="def"){
-        $http.put('api/attends/550a7025155b7def0d3378f8',{
-          date:'',
-        });
-
-        flg = "ch";
-        //console.log("ch:不参加");
-        return;
-      } else  {
-        $http.put('api/attends/550a7025155b7def0d3378f8',{
-          date: date_obj,
-        });
-      }
-
-      flg = "def";
-      //console.log("def:参加");
-
+    $scope.changeAttendStatus = function(status) {
+      // Todo: httpリクエストで参加状況を変更する処理
     };
 
-    $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('attend');
-    });
-
+    $scope.userLogout = function() {
+      $http.post('/api/users/logout').success(function() {
+         return $location.path('/');
+      });
+    };
   })
 
   .controller('NewCtrl', function ($scope, $location, $http, socket, $cookieStore, formService) {
@@ -85,12 +51,6 @@ angular.module('shufflelunchApp')
           $cookieStore.put('user', user)
           return $location.path('/users');
         });
-    };
-
-    $scope.userLogout = function() {
-      $http.post('/api/users/logout').success(function() {
-         return $location.path('/');
-      });
     };
   })
 

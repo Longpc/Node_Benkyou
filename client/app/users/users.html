@@ -1,133 +1,93 @@
-<div class="col-md-12">
-This is the users view.
-  <div>
-    {{user | json}}
-  </div>
-</div>
-
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-   <div class="row">
-      <div id="contents_sample_wrap">
-         <div>
-            <div class="col-xs-1">
-               <h1>{{next_month}}</h1>
-            </div>
-            <div class="col-xs-6">
-               <h1>月のシャッフルランチ：</h1>
-            </div>
-            <div class="col-xs-5">
-                  <h1 class="text_box">参加します</h1>
-            </div>
-            <div class="col-xs-offset-10 col-xs-12">
-               <button type="submit" id="button" class="btn btn-default codebtn" ng-click ="addDate()"  onclick="change()">参加をやめる</button>
-            </div>
-         </div>
+  <div class="row" id="attend">
+    <div class="col-md-6">
+      <h2>{{nextMonth}}月のシャッフルランチ：{{attendStatus}}</h2>
+    </div>
+
+    <div class="col-md-6">
+      <button type="submit" id="attend-button" class="btn btn-default" ng-click="changeAttendStatus()" value="{{attendStatus}}">
+        {{attendStatus}}
+      </button>
+    </div>
+  </div>
+
+  <div class="row" id="group">
+    <div class="col-md-7">
+      <h2>{{thisMonth}}月のグループ</h2>
+      <div class="leader">
+        <p>
+          あなたはリーダーに選ばれました！</br>
+          チャットワークでグループを作成しランチの日時と場所について話合いましょう！
+        </p>
       </div>
-     <script>
-         var label = 'new text';
-         var flg = "default";
 
-         /*var date=new Date();
-         var month=date.getMonth();
-         console.log(month+1);
-         console.log("month");*/
-
-         $(function(){
-            next_month = document.getElementById("next_month");
-            this_month = document.getElementById("this_month");
-            date=new Date();
-            month=date.getMonth();
-            //month = month+1;
-            next_month.innerHTML = month+1;
-            this_month.innerHTML = month;
-         });
-
-         function contribute(){
-            console.log("投稿ボタンが押されました");
-         }
-
-         function change(){
-            if(flg =="default"){
-               console.log("参加しません");
-               flg = "change";
-               $("#contents_sample_wrap .text_box").text("参加しません");
-            }
-            else{
-               console.log("参加します");
-               flg = "default";
-               $("#contents_sample_wrap .text_box").text("参加します");
-            }
-         }
-
-         //参加ボタンを押下したときにボタン内のtextが変更する
-         $(document).ready(function(){
-            var flg = "close";
-            $(".codebtn").click(function(){
-                  if(flg == "close"){
-                     $(this).text("参加する");
-                     flg = "open";
-                  }else{
-                     $(this).text("参加をやめる");
-                     flg = "close";
-                  }
-            });
-         });
-
-
-
-      </script>
-   </div>
-   <div class="row">
-      <div class="col-xs-1">
-         <h2>{{this_month}}</h2>
+      <div id="share">
+        <p>
+          あなたはランチ共有係に選ばれました！</br>
+          ランチが終了後、写真1枚と簡単なコメントを投稿しましょう！
+        </p>
+        <a class="glyphicon glyphicon-pencil btn btn-default" id="share-button" type="button" href="/blogs">投稿する</a>
       </div>
-      <div class="col-xs-11">
-         <h2>月のグループ</h2>
+    </div>
+
+    <div class="col-md-5">
+      <h3>リーダー</h3>
+      <ul>
+        <li>
+          {{leader.name}}
+        </li>
+      </ul>
+
+      <h3>メンバー</h3>
+      <ul>
+        <li ng-repeat="member in members">
+          {{member.name}}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row col-md-12">
+    <div class ="col-md-5" id="blog" ng-repeat="blog in blogs">
+      <div class="col-md-6">
+        <a href="#view-modal" role="button" class="btn" data-toggle="modal">
+          <img src="assets/images/sample.png" alt="blog_picture" class="view1">
+        </a>
       </div>
-      <div class="row">
-         <div class="col-xs-7">
-            <div class="col-xs-offset-2 col-xs-7">
-               <p>あなたはリーダーに選ばれました。</p>
-               <p>チャットワークでグループを作成し、<br>
-                  ランチの日時と場所について話し合いましょう。</p>
+      <div class="col-md-6">
+        <ul>
+          <li>{{blog.name}}</li>
+          <li>日時：</li>
+          <li>メンバー：</li>
+          <li>場所:</li>
+          <a href="#div-modal" role="button" data-toggle="modal">詳細</a>
+        </ul>
+      </div>
+      <div id="div-modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">第1回シャッフルランチ</h4>
             </div>
-            <div class="col-xs-offset-2 col-xs-7">
-               <p>あなたはランチ共有係に選ばれました。</p>
-               <p>ランチが終了後、<br>
-                  写真1枚と簡単なコメントを投稿しましょう。</p>
-               <div>
-                  <button type="button" onclick="contribute()">投稿する</button>
-               </div>
+            <div class="modal-body">
+              <center><img src="assets/images/sample.png" alt="blog_picture" class="view1"></center>
+              {{blog.comment}}
             </div>
-         </div>
-         <div class= "col-xs-5">
-            <h4>リーダー</h4>
-            <ul>
-               <li ng:repeat="user in readers">
-                  {{user.name}}
-               </li>
-            </ul>
-            <h4>メンバー</h4>
-               <ul>
-                  <li ng:repeat="user in members">
-                     {{user.name}}
-                  </li>
-               </ul>
-         </div>
-      </div>
-      <div class = "row">
-         <div class = "col-xs-12">
-            <div class = "row">
-               <ul>
-                  <div class ="col-xs-6"  ng:repeat="picture in pictures">
-                     {{picture.name}}<br>
-                     <img src="assets/images/pic1.png" alt="blog_picture">
-                  </div>
-               </ul>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
             </div>
-         </div>
+          </div>
+        </div>
       </div>
-   </div>
+      <div id="view-modal" class="modal fade">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+        </div>
+        <center><img src="assets/images/sample.png" alt="blog_picture"></center>
+      </div>
+    </div>
+  </div>
 </div>
