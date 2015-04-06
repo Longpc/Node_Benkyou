@@ -18,7 +18,6 @@ angular.module('shufflelunchApp')
     $scope.thisMonth = month;
 
     // Todo: これらの値もhttpで取得
-    $scope.blogs = [{name:'写真1'},{name:'写真2'},{name:'写真3'}];
     $scope.leader = {name: 'kobayashi'};
     $scope.members = [{name:'kobayashi'},{name:'tanei'},{name:'kokubo'}];
 
