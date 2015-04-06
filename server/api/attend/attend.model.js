@@ -4,8 +4,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var AttendSchema = new Schema({
-  name: String,
-  info: String,
+  user_id: [Schema.Types.ObjectId],
   active: Boolean,
   date: Date,
 });

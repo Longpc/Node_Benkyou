@@ -20,3 +20,35 @@
 .user .submit {
     text-align: center;
 }
+
+#attend-button {
+    width: 300px;
+}
+
+#share-button {
+    width: 200px;
+}
+
+#attend {
+    margin: 40px;
+}
+
+#group {
+    margin: 80px 40px 40px 40px;
+}
+
+#blog {
+    border: 1px dotted;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    margin: 40px;
+}
+
+.leader {
+    margin: 40px;
+}
+
+#share {
+    margin: 40px;
+}

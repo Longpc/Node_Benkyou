@@ -10,11 +10,8 @@
       <a href="/" class="navbar-brand">shufflelunch</a>
     </div>
     <div collapse="isCollapsed" class="navbar-collapse collapse" id="navbar-main">
-      <ul class="nav navbar-nav">
-        <li ng-repeat="item in menu1" ng-class="{active: isActive(item.link)}">
-          <a ng-href="{{item.link}}">{{item.title}}</a>
-        </li>
-        <li ng-repeat="item in menu2" ng-class="{active: isActive(item.link)}">
+      <ul class="nav navbar-nav navbar-right">
+        <li ng-repeat="item in menu" ng-class="{active: isActive(item.link)}">
           <a ng-href="{{item.link}}">{{item.title}}</a>
         </li>
       </ul>
