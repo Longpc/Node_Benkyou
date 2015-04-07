@@ -23,7 +23,8 @@
     "batch": "0.5.2",
     "commander": "2.7.1",
     "faker": "2.1.2",
-    "multiparty": "4.1.1"
+    "multiparty": "4.1.1",
+    "moment": "2.9.0"
   },
   "devDependencies": {
     "connect-livereload": "~0.4.0",

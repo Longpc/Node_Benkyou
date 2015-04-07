@@ -3,23 +3,19 @@
 
 console.log('start');
 
+var moment = require('moment');
 var batch = require('../batch.js').batch;
 var User = require('../api/user/user.model');
 var Group = require('../api/group/group.model');
 
-const DIFFERENT_HOURS = -9;
-var date = new Date();
-var year = date.getFullYear();
-var month = date.getMonth();
-var startOfMonth = new Date(year, month, null, DIFFERENT_HOURS);
-var startOfNextMonth = new Date(year, month + 1, null, DIFFERENT_HOURS);
+var startOfMonth = moment().utc().add(9, 'hours').startOf('month');
+var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
 
-console.log(date);
-console.log(startOfMonth);
-console.log(startOfNextMonth);
+console.log(startOfMonth._d);
+console.log(endOfMonth._d);
 
 // 今月のグループを取得
-Group.find({date: {$gt: startOfMonth}, date: {$lt: startOfNextMonth}}, function(err, groups) {
+Group.find({date: {$gt: startOfMonth}, date: {$lt: endOfMonth}}, function(err, groups) {
   if (err) { console.log(err); }
   groups.forEach(function(group) {
     var minCount = 10000;
