@@ -10,7 +10,6 @@ var UserSchema = new Schema({
   department: String,
   sex: String,
   occupation: String,
-  group_ids: [Schema.Types.ObjectId]
 });
 
 module.exports = mongoose.model('User', UserSchema);
