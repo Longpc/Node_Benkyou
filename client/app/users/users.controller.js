@@ -9,20 +9,39 @@ angular.module('shufflelunchApp')
     var user = $cookieStore.get('user');
     $scope.user = user;
 
-    // Todo: httpリクエストを投げて参加状況を取得する
-    $scope.attendStatus = '参加';
-
     var date = new Date();
     var month = date.getMonth();
-    $scope.nextMonth = month + 1;
-    $scope.thisMonth = month;
+    $scope.nextMonth = month + 2;
+    $scope.thisMonth = month + 1;
+
+    $http.get('/api/attends', {params: {user_id: user._id}}).success(function (status) {
+      if (status == 1) {
+        $scope.attendStatus = '参加';
+        $scope.statusValue = 1;
+      } else {
+        $scope.attendStatus = '不参加';
+        $scope.statusValue = 2;
+      }
+    });
 
     // Todo: これらの値もhttpで取得
     $scope.leader = {name: 'kobayashi'};
     $scope.members = [{name:'kobayashi'},{name:'tanei'},{name:'kokubo'}];
 
-    $scope.changeAttendStatus = function(status) {
-      // Todo: httpリクエストで参加状況を変更する処理
+    $scope.changeAttendStatus = function() {
+      var data = {
+        user_id: user._id,
+        status: $scope.statusValue
+      };
+      $http.post('/api/attends', data).success(function(beforeStatus) {
+        if (beforeStatus == 1) {
+          $scope.attendStatus = '不参加';
+          $scope.statusValue = 2;
+        } else {
+          $scope.attendStatus = '参加';
+          $scope.statusValue = 1;
+        }
+      });
     };
 
     $scope.userLogout = function() {

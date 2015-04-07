@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
 var AttendSchema = new Schema({
   user_id: [Schema.Types.ObjectId],
   active: Boolean,
-  date: Date,
+  year: Number,
+  month: Number
 });
 
 module.exports = mongoose.model('Attend', AttendSchema);
