@@ -24,9 +24,10 @@ angular.module('shufflelunchApp')
       }
     });
 
-    // Todo: これらの値もhttpで取得
-    $scope.leader = {name: 'kobayashi'};
-    $scope.members = [{name:'kobayashi'},{name:'tanei'},{name:'kokubo'}];
+    $http.get('/api/groups', {params: {user_id: user._id}}).success(function (group) {
+      $scope.leader = group.leader_id;
+      $scope.members = group.user_ids;
+    });
 
     $scope.changeAttendStatus = function() {
       var data = {

@@ -6,8 +6,8 @@ var mongoose = require('mongoose'),
 var GroupSchema = new Schema({
   date: Date,
   write_blog: Boolean,
-  leader_id: Schema.Types.ObjectId,
-  user_ids: [Schema.Types.ObjectId]
+  leader_id: { type: Schema.Types.ObjectId, ref: 'User' },
+  user_ids: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 module.exports = mongoose.model('Group', GroupSchema);

@@ -1,14 +1,30 @@
 'use strict';
 
 var _ = require('lodash');
+var moment = require('moment');
 var Group = require('./group.model');
+var User = require('../user/user.model');
 
 // Get list of groups
 exports.index = function(req, res) {
-  Group.find(function (err, groups) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, groups);
-  });
+  var startOfMonth = moment().utc().add(9, 'hours').startOf('month');
+  var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
+  var data = {
+    user_ids: req.query.user_id,
+    date: {
+      "$gte": startOfMonth,
+      "$lte": endOfMonth
+    }
+  };
+
+  Group.findOne(data)
+    .populate('leader_id')
+    .populate('user_ids')
+    .exec(function (err, groups) {
+      console.log(groups);
+      if(err) { return handleError(res, err); }
+      return res.json(groups);
+    });
 };
 
 // Get a single group
