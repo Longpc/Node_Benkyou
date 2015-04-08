@@ -8,8 +8,7 @@ var BlogSchema = new Schema({
   date: String,
   comment: String,
   image_path: String,
-  user_id: Schema.Types.ObjectId,
-  group_id: Schema.Types.ObjectId,
+  user_id: Schema.Types.ObjectId
 });
 
 module.exports = mongoose.model('Blog', BlogSchema);

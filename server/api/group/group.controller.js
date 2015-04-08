@@ -21,7 +21,6 @@ exports.index = function(req, res) {
     .populate('leader_id')
     .populate('user_ids')
     .exec(function (err, groups) {
-      console.log(groups);
       if(err) { return handleError(res, err); }
       return res.json(groups);
     });

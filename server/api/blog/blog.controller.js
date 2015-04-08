@@ -24,9 +24,10 @@ exports.show = function(req, res) {
 
 // Creates a new blog in the DB.
 exports.create = function(req, res) {
+  if (!req.session.user) { return res.status(401).redirect('/'); }
   var form = new multiparty.Form();
   form.parse(req, function(err, fields, files) {
-    if (err) { return handleError(res, err); }
+    if (err) { return res.status(500).redirect('/users'); }
 
     files.file.forEach(function(file) {
       var dir = file.path.split('/');
@@ -34,21 +35,20 @@ exports.create = function(req, res) {
       var newPath = 'client/assets/images/blogs/' + filename;
 
       fs.rename(file.path, newPath, function(err) {
-        if (err) { return handleError(res, err); }
+        if (err) { return res.status(500).redirect('/users'); }
 
         var blogData = {
           date: fields.date,
           place: fields.place,
           comment: fields.comment,
           image_path: '/assets/images/blogs/' + filename,
-          // user_id: '',
-          // group_id: ''
+          user_id: req.session.user._id
         };
 
         Blog.create(blogData, function(err, blog) {
-          console.log(err);
-          if(err) { return handleError(res, err); }
-          return res.json(201, blog);
+          if (err) { return res.status(500).redirect('/users'); }
+          // return res.redirect(201, '/users');
+          return res.status(201).redirect('/users');
         });
       });
     });

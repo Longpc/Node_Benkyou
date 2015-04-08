@@ -1,13 +1,14 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12" ng-controller="BlogsCtrl">
-      <form method="post" action="/api/blogs" class="form-horizontal blog-form" ng-upload="uploadComplete(content)" enctype="multipart/form-data">
+  <div id="new-blog" class="row">
+    <div class="col-xs-12">
+      <form method="post" action="/api/blogs" class="form-horizontal blog-form" enctype="multipart/form-data">
         <div class="form-group">
           <label for="date" class="col-md-3">日付</label>
-          <div class="col-md-9">
-            <input type="date" name="date" class="form-control" id="date" ng-model="newBlog.date" required>
+          <div class="col-md-9" ng-click="toggleDatePicker($event)">
+            <input type="text" id="date" name="date" class="form-control" datepicker-popup is-open="datePickerOpen" ng-model="newBlog.date" required>
+            <i class="glyphicon glyphicon-calendar"></i>
           </div>
         </div>
 
@@ -33,10 +34,9 @@
         </div>
 
         <div class="submit">
-          <input upload-submit="" class="btn btn-default" type="submit" value="投稿する" ng-disabled="$isUploading">
+          <input class="btn btn-default btn-common" type="submit" value="投稿する">
         </div>
       </form>
-
     </div>
   </div>
 </div>
