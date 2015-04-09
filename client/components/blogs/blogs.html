@@ -8,7 +8,7 @@
         <li class="list-group-item">投稿者：{{blog.user_id.name}}</li>
         <li class="list-group-item">日時：{{blog.date}}</li>
         <li class="list-group-item">場所：{{blog.place}}</li>
-        <a class="list-group-item list-group-item-info" role="button" data-toggle="modal" data-target="#modal-{{$index}}">詳細</a>
+        <a class="list-group-item list-group-item-warning" role="button" data-toggle="modal" data-target="#modal-{{$index}}">詳細</a>
       </ul>
     </div>
     <div id="modal-{{$index}}" class="modal fade">
@@ -29,7 +29,7 @@
             </ul>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">閉じる</button>
           </div>
         </div>
       </div>
