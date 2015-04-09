@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-md-6">
-      <button type="submit" id="attend-button" class="btn btn-default" ng-click="changeAttendStatus()" value="{{statusValue}}">
+      <button type="submit" id="attend-button" class="btn btn-default btn-common" ng-click="changeAttendStatus()" value="{{statusValue}}">
         {{attendStatus}}を取り消す
       </button>
     </div>
@@ -16,36 +16,28 @@
   <div class="row" id="group">
     <div class="col-md-7">
       <h2>{{thisMonth}}月のグループ</h2>
-      <div class="leader">
+      <div class="leader" ng-show="isLeader">
         <p>
           あなたはリーダーに選ばれました！</br>
           チャットワークでグループを作成しランチの日時と場所について話合いましょう！
         </p>
       </div>
-
-      <div id="share">
-        <p>
-          あなたはランチ共有係に選ばれました！</br>
-          ランチが終了後、写真1枚と簡単なコメントを投稿しましょう！
-        </p>
-        <a class="glyphicon glyphicon-pencil btn btn-default" id="share-button" type="button" href="/blogs">投稿する</a>
-      </div>
     </div>
 
-    <div class="col-md-5">
-      <h3>リーダー</h3>
-      <ul>
-        <li>
+    <div class="col-md-5" ng-show="belongGroup">
+      <h3>メンバー</h3>
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-success">
           {{leader.name}}
         </li>
-      </ul>
-
-      <h3>メンバー</h3>
-      <ul>
-        <li ng-repeat="member in members">
+        <li ng-repeat="member in members" class="list-group-item">
           {{member.name}}
         </li>
       </ul>
+      <p>※先頭の方がリーダーです</p>
+    </div>
+    <div class="col-md-5" ng-show="!belongGroup">
+      <h4>今月のランチには参加していません</h4>
     </div>
   </div>
 

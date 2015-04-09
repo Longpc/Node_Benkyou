@@ -6,10 +6,10 @@ var mongoose = require('mongoose'),
 var BlogSchema = new Schema({
   place: String,
   date: String,
+  member: String,
   comment: String,
   image_path: String,
-  user_id: Schema.Types.ObjectId,
-  group_id: Schema.Types.ObjectId,
+  user_id: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 module.exports = mongoose.model('Blog', BlogSchema);

@@ -21,8 +21,12 @@ exports.index = function(req, res) {
     .populate('leader_id')
     .populate('user_ids')
     .exec(function (err, groups) {
-      console.log(groups);
       if(err) { return handleError(res, err); }
+      if (groups) {
+        groups.user_ids.forEach(function(m, i) {
+          if (m.id === groups.leader_id.id) { groups.user_ids.splice(i, 1); }
+        });
+      }
       return res.json(groups);
     });
 };

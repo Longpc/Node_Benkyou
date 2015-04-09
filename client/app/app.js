@@ -5,7 +5,6 @@ angular.module('shufflelunchApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ngUpload',
   'btford.socket-io',
   'ui.bootstrap'
 ])

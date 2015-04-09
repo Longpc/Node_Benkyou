@@ -14,7 +14,7 @@
   <div class="form-group">
     <label for="email" class="col-md-3">Email</label>
     <div class="col-md-9">
-      <input type="email" name"email" class="form-control" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="newUser.email" required>
+      <input type="email" name="email" class="form-control" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="newUser.email" required>
       <span class="unique error" ng-show="emailDuplicated">そのメールアドレスは既に登録されています</span>
     </div>
   </div>
@@ -65,7 +65,7 @@
   </div>
 
   <div class="submit">
-    <input class="btn btn-default" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
+    <input class="btn btn-default btn-common" type="submit" value="新規登録" ng-disabled="newUser.$invalid">
   </div>
 
 </form>
