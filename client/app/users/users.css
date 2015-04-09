@@ -39,11 +39,11 @@
 }
 
 #blog {
-    border: 1px dotted;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    margin: 35px;
+    margin-bottom: 30px;
+}
+
+.blog-lists {
+    margin-top: 20px;
 }
 
 .leader {
@@ -52,4 +52,33 @@
 
 #share {
     margin: 40px;
+}
+
+.list-group ul {
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.modal-header {
+    text-align: center;
+}
+
+img.thumb {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+img.detail {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+.image-thumb {
+    text-align: center;
+    margin-bottom: 20px;
 }

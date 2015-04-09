@@ -5,7 +5,7 @@ Thing.find({}).remove(function() {
     name : 'ユーザー登録',
     image_path : 'assets/images/icon_user.png'
   }, {
-    name : '毎月１日にグループ・リーダー・共有係をメールで通知',
+    name : '毎月１日にグループ・リーダー・共有係をチャットワークで通知',
     image_path : 'assets/images/icon_email.png'
   }, {
     name : 'チャットワークでランチの日時と場所を決定',

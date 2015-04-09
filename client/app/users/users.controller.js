@@ -13,6 +13,7 @@ angular.module('shufflelunchApp')
     var month = date.getMonth();
     $scope.nextMonth = month + 2;
     $scope.thisMonth = month + 1;
+    $scope.isLeader = false;
 
     $http.get('/api/attends', {params: {user_id: user._id}}).success(function (status) {
       if (status == 1) {
@@ -25,8 +26,14 @@ angular.module('shufflelunchApp')
     });
 
     $http.get('/api/groups', {params: {user_id: user._id}}).success(function (group) {
-      $scope.leader = group.leader_id;
-      $scope.members = group.user_ids;
+      if (!group) {
+        $scope.belongGroup = false;
+      } else {
+        $scope.belongGroup = true;
+        $scope.leader = group.leader_id;
+        $scope.members = group.user_ids;
+        if (group.leader_id._id == user._id) { $scope.isLeader = true; }
+      }
     });
 
     $scope.changeAttendStatus = function() {

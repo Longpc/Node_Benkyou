@@ -7,10 +7,12 @@ var Blog = require('./blog.model');
 
 // Get list of blogs
 exports.index = function(req, res) {
-  Blog.find(function (err, blogs) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, blogs);
-  });
+  Blog.find()
+    .populate('user_id')
+    .exec(function (err, blogs) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, blogs);
+    });
 };
 
 // Get a single blog
@@ -40,6 +42,7 @@ exports.create = function(req, res) {
         var blogData = {
           date: fields.date,
           place: fields.place,
+          member: fields.member,
           comment: fields.comment,
           image_path: '/assets/images/blogs/' + filename,
           user_id: req.session.user._id

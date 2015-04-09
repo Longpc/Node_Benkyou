@@ -1,41 +1,38 @@
-<div class="row col-md-12" ng-controller="BlogListsCtrl">
-  <div class ="col-md-5" id="blog" ng-repeat="blog in blogs">
-    <div class="col-md-6">
-      <a href="#view-modal" role="button" class="btn" data-toggle="modal">
-        <img src="assets/images/sample.png" alt="blog_picture" class="view1">
-      </a>
+<div class="row col-md-12 blog-lists" ng-controller="BlogListsCtrl">
+  <div class ="col-md-6" id="blog" ng-repeat="blog in blogs">
+    <div class="col-md-6 image-thumb">
+      <img src="{{blog.image_path}}" alt="blog_picture" class="thumb">
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 list-group">
       <ul>
-        <li>{{blog.name}}</li>
-        <li>日時：</li>
-        <li>メンバー：</li>
-        <li>場所:</li>
-        <a href="#div-modal" role="button" data-toggle="modal">詳細</a>
+        <li class="list-group-item">投稿者：{{blog.user_id.name}}</li>
+        <li class="list-group-item">日時：{{blog.date}}</li>
+        <li class="list-group-item">場所：{{blog.place}}</li>
+        <a class="list-group-item list-group-item-info" role="button" data-toggle="modal" data-target="#modal-{{$index}}">詳細</a>
       </ul>
     </div>
-    <div id="div-modal" class="modal fade">
+    <div id="modal-{{$index}}" class="modal fade">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">第1回シャッフルランチ</h4>
+            <h3 class="modal-title">シャッフルランチレポート</h3>
           </div>
-          <div class="modal-body">
-            <center><img src="assets/images/sample.png" alt="blog_picture" class="view1"></center>
-            {{blog.comment}}
+          <div class="modal-body list-group">
+            <img src="{{blog.image_path}}" alt="blog_picture" class="detail">
+            <ul>
+              <li class="list-group-item">投稿者：{{blog.user_id.name}}</li>
+              <li class="list-group-item">日時：{{blog.date}}</li>
+              <li class="list-group-item">場所：{{blog.place}}</li>
+              <li class="list-group-item">メンバー：{{blog.member}}</li>
+              <li class="list-group-item">コメント：<p>{{blog.comment}}</p></li>
+            </ul>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
           </div>
         </div>
       </div>
-    </div>
-    <div id="view-modal" class="modal fade">
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-      </div>
-      <center><img src="assets/images/sample.png" alt="blog_picture"></center>
     </div>
   </div>
 </div>
