@@ -6,10 +6,9 @@
     margin: 0 60px 0 60px;
 }
 
-.user input.btn {
+.submit input.btn {
     width: 60%;
-    height: 50px;
-    font-size: 21px;
+    font-size: 19px;
     font-weight: bold;
 }
 
@@ -17,25 +16,30 @@
     margin-top: 30px;
 }
 
-.user .submit {
+.submit {
     text-align: center;
 }
 
-#attend-button {
-    width: 300px;
-}
-
-#share-button {
-    width: 200px;
-    margin-top: 0px;
-}
-
 #attend {
-    margin: 40px;
+    margin: 40px 0 40px;
+}
+
+#attend button {
+    width: 300px;
+    margin: 20px 0 20px;
+}
+
+#attend h2 {
+    margin: 20px 0 20px;
+
 }
 
 #group {
-    margin: 80px 40px 40px 40px;
+    margin: 40px 0 40px;
+}
+
+#group .group-info {
+    margin: 30px 0 0 40px;
 }
 
 #blog {
@@ -47,10 +51,6 @@
 }
 
 .leader {
-    margin: 40px;
-}
-
-#share {
     margin: 40px;
 }
 

@@ -29,5 +29,10 @@ angular.module('shufflelunchApp')
         templateUrl: 'app/users/edit.html',
         controller: 'EditCtrl',
         resolve: requireAuth
+      })
+      .when('/users/logout', {
+        templateUrl: 'app/main/main.html',
+        controller: 'LogoutCtrl',
+        resolve: requireAuth
       });
   });

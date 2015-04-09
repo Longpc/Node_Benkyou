@@ -19,9 +19,11 @@ angular.module('shufflelunchApp')
       if (status == 1) {
         $scope.attendStatus = '参加';
         $scope.statusValue = 1;
+        $scope.changeBtnClass = 'btn-danger';
       } else {
         $scope.attendStatus = '不参加';
         $scope.statusValue = 2;
+        $scope.changeBtnClass = 'btn-info';
       }
     });
 
@@ -45,16 +47,12 @@ angular.module('shufflelunchApp')
         if (beforeStatus == 1) {
           $scope.attendStatus = '不参加';
           $scope.statusValue = 2;
+          $scope.changeBtnClass = 'btn-info';
         } else {
           $scope.attendStatus = '参加';
           $scope.statusValue = 1;
+          $scope.changeBtnClass = 'btn-danger';
         }
-      });
-    };
-
-    $scope.userLogout = function() {
-      $http.post('/api/users/logout').success(function() {
-         return $location.path('/');
       });
     };
   })
@@ -100,6 +98,14 @@ angular.module('shufflelunchApp')
           return $location.path('/users');
         });
     };
+  })
+
+  .controller('LogoutCtrl', function($scope, $location, $http, $cookieStore) {
+    var user = $cookieStore.get('user');
+    $http.post('/api/users/logout').success(function(response) {
+      $cookieStore.remove('user');
+      return $location.path('/');
+    });
   });
 
 var createFormParts = function($scope, $http, socket) {
