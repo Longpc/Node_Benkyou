@@ -1,12 +1,11 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('MainCtrl', function ($scope, $location, $http, socket, $cookieStore) {
+  .controller('MainCtrl', function ($scope, $location, $http, $cookieStore) {
     $scope.awesomeThings = [];
 
-    $http.get('/api/things').success(function(awesomeThings) {
+    $http.get('/api/things/flow').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;
-      socket.syncUpdates('thing', $scope.awesomeThings);
     });
 
     $scope.userLogin = function() {
@@ -21,20 +20,4 @@ angular.module('shufflelunchApp')
         }
       });
     };
-
-    $scope.addThing = function() {
-      if($scope.newThing === '') {
-        return;
-      }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
-    };
-
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
-    };
-
-    $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('thing');
-    });
   });

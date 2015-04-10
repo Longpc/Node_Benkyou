@@ -15,8 +15,8 @@ angular.module('shufflelunchApp')
     $scope.thisMonth = month + 1;
     $scope.isLeader = false;
 
-    $http.get('/api/attends', {params: {user_id: user._id}}).success(function (status) {
-      if (status == 1) {
+    $http.get('/api/attends/' + user._id).success(function (status) {
+      if (status.result == 1) {
         $scope.attendStatus = '参加';
         $scope.statusValue = 1;
         $scope.changeBtnClass = 'btn-danger';
@@ -44,7 +44,7 @@ angular.module('shufflelunchApp')
         status: $scope.statusValue
       };
       $http.post('/api/attends', data).success(function(beforeStatus) {
-        if (beforeStatus == 1) {
+        if (beforeStatus.result == 1) {
           $scope.attendStatus = '不参加';
           $scope.statusValue = 2;
           $scope.changeBtnClass = 'btn-info';
@@ -65,7 +65,7 @@ angular.module('shufflelunchApp')
       if ($scope.newUser.password != $scope.confirm) { return $scope.wrongPassword = true; }
       $scope.wrongPassword = false;
 
-      $http.post('/api/users', $scope.newUser)
+      $http.post('/api/users', {'user': $scope.newUser})
         .success(function(user) {
           if (user == 'email_duplicated') {
             return $scope.emailDuplicated = true;
@@ -88,7 +88,7 @@ angular.module('shufflelunchApp')
       if ($scope.updateUser === '') {
         return;
       }
-      $http.put('/api/users/' + user['_id'], $scope.loginUser)
+      $http.put('/api/users/' + user._id, $scope.loginUser)
         .success(function(user) {
           if (user == 'wrong_password') {
             return $scope.wrongPassword = true;
