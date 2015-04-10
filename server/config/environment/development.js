@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/shufflelunch-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };

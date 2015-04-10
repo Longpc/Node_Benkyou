@@ -1,0 +1,84 @@
+.user h1 {
+    margin: 50px 0 60px 30px;
+}
+
+.user form {
+    margin: 0 60px 0 60px;
+}
+
+.submit input.btn {
+    width: 60%;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.user .form-group {
+    margin-top: 30px;
+}
+
+.submit {
+    text-align: center;
+}
+
+#attend {
+    margin: 40px 0 40px;
+}
+
+#attend button {
+    width: 300px;
+    margin: 20px 0 20px;
+}
+
+#attend h2 {
+    margin: 20px 0 20px;
+
+}
+
+#group {
+    margin: 40px 0 40px;
+}
+
+#group .group-info {
+    margin: 30px 0 0 40px;
+}
+
+#blog {
+    margin-bottom: 30px;
+}
+
+.blog-lists {
+    margin-top: 20px;
+}
+
+.leader {
+    margin: 40px;
+}
+
+.list-group ul {
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.modal-header {
+    text-align: center;
+}
+
+img.thumb {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+img.detail {
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+.image-thumb {
+    text-align: center;
+    margin-bottom: 20px;
+}

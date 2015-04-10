@@ -1,19 +1,29 @@
-.thing-form {
-    margin: 20px 0;
-}
-
 #banner {
     border-bottom: none;
     margin-top: -20px;
-    background: url('../../assets/images/cafe_dark.jpg');
+    background: url('../../assets/images/cafe.jpg');
     background-size: cover;
     height: 550px;
+    padding: 0;
 }
 
 #banner h1 {
-    font-size: 60px;
     line-height: 1;
     letter-spacing: -1px;
+    font-size: 62px;
+    font-weight: bold;
+    margin-top: 80px;
+    color: #FFFFFF;
+}
+
+#banner p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.wrapper {
+    background: url('../../assets/images/bg_black.png');
+    height: 100%;
 }
 
 .hero-unit {
@@ -32,23 +42,73 @@
     border-top: 1px solid #E5E5E5;
 }
 
-ul.nav.nav-tabs {
-    margin-right: 20px;
+#login {
+    margin-top: 80px;
 }
 
-ul.nav.nav-tabs img {
+#login #email {
     width: 100%;
 }
 
-#email {
-    width: 100%;
+#login input {
+    color: #000;
 }
 
-.right input {
-    color: #000000;
+#login input.btn {
+    opacity: 1.0 !important;
+    margin: 5px 0 5px 5px;
+    color: #FFF;
 }
 
-a.btn.btn-default {
+.btn-common {
     width: 100%;
     margin-top: 50px;
+    border: 0;
+    font-size: 15px;
+}
+
+h2.page-header {
+    text-align: center;
+    margin: 70px 0 25px 0;
+}
+
+table.nav {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+table.nav img {
+    width: 50%;
+}
+
+table.nav p {
+    border-bottom: 1px solid #DDD;
+    color: #55ACEE;
+    font-weight: bold;
+}
+
+td.message {
+    padding-top: 20px;
+    vertical-align: bottom;
+}
+
+@media only screen and (max-width: 480px) {
+    table.nav th,
+    table.nav td {
+        width: 100%;
+        display: block;
+    }
+
+    table.nav img {
+        width: 20%;
+        margin-top: 10px;
+    }
+
+    #login {
+        float: none;
+    }
+
+    div.main-text {
+        visibility: hidden;
+    }
 }

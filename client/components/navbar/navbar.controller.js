@@ -3,8 +3,14 @@
 angular.module('shufflelunchApp')
   .controller('NavbarCtrl', function ($scope, $location) {
     $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
+      'title': 'レポート投稿',
+      'link': '/blogs'
+    }, {
+      'title': 'プロフィール編集',
+      'link': '/users/edit'
+    }, {
+      'title': 'ログアウト',
+      'link': '/users/logout'
     }];
 
     $scope.isCollapsed = true;

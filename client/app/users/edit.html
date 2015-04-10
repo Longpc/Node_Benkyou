@@ -1,4 +1,6 @@
-<div class="col-md-12">
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="col-md-12 user">
 <h1>プロフィール編集</h1>
 
 <form class="form-horizontal" ng-controller="EditCtrl" ng-submit="updateUser()">
@@ -35,14 +37,9 @@
     </div>
   </div>
 
-  <!-- <div class="form&#45;group"> -->
-  <!--   <label for="password" class="col&#45;md&#45;3">パスワードの確認</label> -->
-  <!--   <div class="col&#45;md&#45;9"> -->
-  <!--     <input type="password" name="password_confirmation" class="form&#45;control" id="password_confirmation"> -->
-  <!--   </div> -->
-  <!-- </div> -->
-
-  <input class="btn btn-default" type="submit" value="更新" ng-disabled="loginUser.$invalid">
+  <div class="submit">
+    <input class="btn btn-info btn-common" type="submit" value="更新" ng-disabled="loginUser.$invalid">
+  </div>
 
 </form>
 </div>

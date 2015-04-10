@@ -10,5 +10,7 @@ module.exports = {
   SESSION_SECRET:   'shufflelunch-secret',
 
   // Control debug level for modules using visionmedia/debug
-  DEBUG: ''
+  DEBUG: '',
+  CHATWORK_API_TOKEN: '',
+  CHATWORK_ROOM_ID: ''
 };

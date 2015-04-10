@@ -1,6 +1,46 @@
-<div class="col-md-12">
-This is the users view.
-  <div>
-    {{user | json}}
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row" id="attend">
+    <div class="col-md-7">
+      <h2>シャッフルランチ{{nextMonth}}月度：{{attendStatus}}</h2>
+    </div>
+    <div class="col-md-5">
+      <button type="submit" class="btn" ng-class="changeBtnClass" ng-click="changeAttendStatus()" value="{{statusValue}}">
+        {{attendStatus}}を取り消す
+      </button>
+    </div>
   </div>
+
+  <div class="row" id="group">
+    <div class="col-md-7" ng-show="belongGroup">
+      <h2>{{thisMonth}}月のグループ</h2>
+      <div class="group-info">
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-warning">
+            {{leader.name}}
+          </li>
+          <li ng-repeat="member in members" class="list-group-item">
+            {{member.name}}
+          </li>
+        </ul>
+        <p>※先頭の方がリーダーです</p>
+      </div>
+    </div>
+    <div class="col-md-7" ng-show="!belongGroup">
+      <h4>今月のランチには参加していません</h4>
+    </div>
+
+    <div class="col-md-5">
+      <div class="leader" ng-show="isLeader">
+        <p>
+          あなたはリーダーに選ばれました！</br>
+          チャットワークでグループを作成しランチの日時と場所について話合いましょう！
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div ng-include="'components/blogs/blogs.html'"></div>
+
 </div>

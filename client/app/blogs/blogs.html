@@ -1,0 +1,49 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div id="new-blog" class="row">
+    <div class="col-xs-12">
+      <form method="post" action="/api/blogs" class="form-horizontal blog-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="date" class="col-md-3">日付</label>
+          <div class="col-md-9" ng-click="toggleDatePicker($event)">
+            <input type="text" id="date" name="date" class="form-control" datepicker-popup is-open="datePickerOpen" ng-model="newBlog.date" required>
+            <i class="glyphicon glyphicon-calendar"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="place" class="col-md-3">店名</label>
+          <div class="col-md-9">
+            <input type="text" name="place" class="form-control" id="place" placeholder="やきとり酒場" ng-model="newBlog.place" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="member" class="col-md-3">メンバー</label>
+          <div class="col-md-9">
+            <input type="text" name="member" class="form-control" id="member" placeholder="奥苑,金,小久保,種井" ng-model="newBlog.member" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comment" class="col-md-3">記事内容</label>
+          <div class="col-md-9">
+            <textarea id="comment" name="comment" cols="100" rows="10" maxlength="1000" placeholder="ランチの感想を簡単にご記入ください" ng-model="newBlog.comment"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="image" class="col-md-3">画像</label>
+          <div class="col-md-9">
+            <input type="file" name="file" id="image" ng-model="newBlog.image" required>
+          </div>
+        </div>
+
+        <div class="submit">
+          <input class="btn btn-info btn-common" type="submit" value="投稿する">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
