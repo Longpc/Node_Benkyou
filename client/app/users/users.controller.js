@@ -27,14 +27,14 @@ angular.module('shufflelunchApp')
       }
     });
 
-    $http.get('/api/groups', {params: {user_id: user._id}}).success(function (group) {
+    $http.get('/api/groups/'+ user._id).success(function (data) {
       if (!group) {
         $scope.belongGroup = false;
       } else {
         $scope.belongGroup = true;
-        $scope.leader = group.leader_id;
-        $scope.members = group.user_ids;
-        if (group.leader_id._id == user._id) { $scope.isLeader = true; }
+        $scope.leader = data.group.leader_id;
+        $scope.members = data.group.user_ids;
+        if (data.group.leader_id._id == user._id) { $scope.isLeader = true; }
       }
     });
 
@@ -66,13 +66,13 @@ angular.module('shufflelunchApp')
       $scope.wrongPassword = false;
 
       $http.post('/api/users', {'user': $scope.newUser})
-        .success(function(user) {
-          if (user == 'email_duplicated') {
+        .success(function(userData) {
+          if (userData.result == 2) { // email duplicated
             return $scope.emailDuplicated = true;
           }
 
-          delete user['password'];
-          $cookieStore.put('user', user)
+          delete userData.user.password;
+          $cookieStore.put('user', userData.user)
           return $location.path('/users');
         });
     };

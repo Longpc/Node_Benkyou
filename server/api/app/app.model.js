@@ -9,11 +9,11 @@ var AppSchema = new Schema({
   active: Boolean
 });
 
-AppSchema.static('receiveReqData', function(req) {
-  if (isNativeApp(req.body)) {
-    return req.body.data.request;
+AppSchema.static('receiveReqData', function(reqBody) {
+  if (isNativeApp(reqBody)) {
+    return reqBody.data.request;
   }
-  return req.body;
+  return reqBody;
 });
 
 // errorCode: 0 => success, 1 => error
@@ -37,8 +37,8 @@ module.exports = mongoose.model('App', AppSchema);
 function isNativeApp(reqBody) {
   if ('data' in reqBody) {
     if ('common' in reqBody.data) {
-      if ('error' in reqBody.common) {
-        if (reqBody.common.error === 1) return true;
+      if ('device' in reqBody.data.common) {
+        if (reqBody.data.common.device === 1) return true;
       }
     }
   }

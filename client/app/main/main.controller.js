@@ -9,10 +9,10 @@ angular.module('shufflelunchApp')
     });
 
     $scope.userLogin = function() {
-      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(user) {
-        if (user != '') {
-          delete user['password'];
-          $cookieStore.put('user', user);
+      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(data) {
+        if (data.result === 1) {
+          delete data.user.password;
+          $cookieStore.put('user', data.user);
           return $location.path('/users');
         } else {
           $scope.loginFailed = true;

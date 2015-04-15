@@ -6,16 +6,20 @@ var User = require('./user.model');
 
 // Creates a new user in the DB.
 exports.create = function(req, res) {
-  var data = App.recieveReqData(req);
+  var data = App.receiveReqData(req.body);
   User.count({email: data.user.email}, function(err, count) {
-    if(err) { return handleError(res, err); }
-    if (count !== 0) { return res.json(200, 'email_duplicated'); }
+    if(err) { return handleError(res, err, req.body); }
+    if (count !== 0) { return res.json(200, App.makeResData({'result': 2}, req.body, 0)); }
 
     data.user.password = User.createHash(data.user.password);
     User.create(data.user, function(err, user) {
-      if(err) { return handleError(res, err); }
+      if(err) { return handleError(res, err, req.body); }
       req.session.user = user;
-      return res.json(201, App.makeResData(user, req.body, 0));
+      var userData = {
+        result: 1,
+        user: user
+      };
+      return res.json(201, App.makeResData(userData, req.body, 0));
     });
   });
 };
@@ -26,25 +30,13 @@ exports.update = function(req, res) {
   req.body.password = User.createHash(req.body.password);
 
   User.findOne({_id: req.params.id, password: req.body.password}, function (err, user) {
-    if (err) { return handleError(res, err); }
+    if (err) { return handleError(res, err, req.body); }
     if (!user) { return res.json(200, 'wrong_password'); }
     var updated = _.merge(user, req.body);
     updated.save(function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) { return handleError(res, err, req.body); }
       req.session.user = user;
       return res.json(200, user);
-    });
-  });
-};
-
-// Deletes a user from the DB.
-exports.destroy = function(req, res) {
-  User.findById(req.params.id, function (err, user) {
-    if(err) { return handleError(res, err); }
-    if(!user) { return res.send(404); }
-    user.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
     });
   });
 };
@@ -59,12 +51,17 @@ exports.islogged = function(req, res) {
 };
 
 exports.login = function(req, res) {
-  User.findOne({email: req.body.email, password: User.createHash(req.body.password)}, function(err, user) {
+  var data = App.receiveReqData(req.body);
+  User.findOne({email: data.email, password: User.createHash(data.password)}, function(err, user) {
     if (user) {
       req.session.user = user;
-      return res.json(200, user);
+      var userData = {
+        result: 1,
+        user: user
+      };
+      return res.json(200, userData);
     }
-    return res.json(200, '');
+    return res.json(200, App.makeResData({'result': 3}, req.body, 0));
   });
 };
 
@@ -73,6 +70,6 @@ exports.logout = function(req, res) {
   return res.json(200, 'success');
 };
 
-function handleError(res, err) {
-  return res.send(500, err);
+function handleError(res, err, reqBody) {
+  return res.json(500, App.makeResData(err, reqBody, 1));
 }
