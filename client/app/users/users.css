@@ -25,7 +25,7 @@
 }
 
 #attend button {
-    width: 300px;
+    width: 100%;
     margin: 20px 0 20px;
 }
 
@@ -54,6 +54,10 @@
     margin: 40px;
 }
 
+#blog .list-group.col-md-6 {
+    padding-left: inherit;
+}
+
 .list-group ul {
     text-align: left;
     padding-left: 0;
@@ -74,11 +78,43 @@ img.thumb {
 }
 
 img.detail {
-    width: 90%;
+    max-width: 500px;
+    max-height: 500px;
     margin-bottom: 20px;
 }
 
 .image-thumb {
     text-align: center;
     margin-bottom: 20px;
+}
+
+textarea#comment {
+    width: 100%;
+}
+
+@media only screen and (max-width: 480px) {
+    .user h1 {
+        margin: 20px 0 30px 10px;
+        font-size: 25px;
+    }
+
+    .user form {
+        margin: 0 20px 0 20px;
+    }
+
+    .leader {
+        margin: 20px 0 0;
+    }
+
+    .submit input.btn {
+        width: 100%;
+    }
+
+    #group .group-info {
+        margin: 10px 0 0;
+    }
+
+    ul.dropdown-menu {
+        left: 3px !important;
+    }
 }

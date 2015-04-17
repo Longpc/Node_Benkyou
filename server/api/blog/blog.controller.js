@@ -8,7 +8,7 @@ var Blog = require('./blog.model');
 // Get list of blogs
 exports.index = function(req, res) {
   Blog.find()
-    .populate('user_id')
+    .populate('user_id', 'name')
     .exec(function (err, blogs) {
       if(err) { return handleError(res, err); }
       return res.json(200, blogs);

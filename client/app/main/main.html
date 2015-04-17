@@ -1,7 +1,7 @@
 <header class="hero-unit" id="banner">
   <div class="wrapper">
     <div class="container">
-      <div class="right" id="login">
+      <div class="right" id="login" ng-show="!isLogged">
         <form name="loginForm" class="form-horizontal" ng-submit="userLogin()">
           <input type="email" id="email" placeholder="ishitsuka.jun@boi.jp" ng-model="email" required>
           <table>
@@ -13,6 +13,10 @@
           <span class="unique error" ng-show="loginFailed">ログインに失敗しました</span>
         </form>
         <a class="btn btn-info btn-common" href="users/new" role="button">新規登録</a>
+      </div>
+
+      <div class="right" id="login" ng-show="isLogged">
+        <a class="btn btn-info btn-common" id="mypage" href="/users" role="button">マイページ</a>
       </div>
     </div>
     <div class="main-text">

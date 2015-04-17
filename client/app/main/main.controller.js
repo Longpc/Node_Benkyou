@@ -1,19 +1,20 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('MainCtrl', function ($scope, $location, $http, socket, $cookieStore) {
+  .controller('MainCtrl', function ($scope, $location, $http, $cookieStore) {
+    var user = $cookieStore.get('user');
     $scope.awesomeThings = [];
+    $scope.isLogged = (user) ? true : false;
 
-    $http.get('/api/things').success(function(awesomeThings) {
+    $http.get('/api/things/flow').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;
-      socket.syncUpdates('thing', $scope.awesomeThings);
     });
 
     $scope.userLogin = function() {
-      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(user) {
-        if (user != '') {
-          delete user['password'];
-          $cookieStore.put('user', user);
+      $http.post('/api/users/login', { email: $scope.email, password: $scope.password }).success(function(data) {
+        if (data.result === 1) {
+          delete data.user.password;
+          $cookieStore.put('user', data.user);
           return $location.path('/users');
         } else {
           $scope.loginFailed = true;
@@ -21,20 +22,4 @@ angular.module('shufflelunchApp')
         }
       });
     };
-
-    $scope.addThing = function() {
-      if($scope.newThing === '') {
-        return;
-      }
-      $http.post('/api/things', { name: $scope.newThing });
-      $scope.newThing = '';
-    };
-
-    $scope.deleteThing = function(thing) {
-      $http.delete('/api/things/' + thing._id);
-    };
-
-    $scope.$on('$destroy', function () {
-      socket.unsyncUpdates('thing');
-    });
   });
