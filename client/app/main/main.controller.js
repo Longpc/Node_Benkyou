@@ -2,7 +2,9 @@
 
 angular.module('shufflelunchApp')
   .controller('MainCtrl', function ($scope, $location, $http, $cookieStore) {
+    var user = $cookieStore.get('user');
     $scope.awesomeThings = [];
+    $scope.isLogged = (user) ? true : false;
 
     $http.get('/api/things/flow').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;

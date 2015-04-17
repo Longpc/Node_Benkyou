@@ -28,7 +28,7 @@ angular.module('shufflelunchApp')
     });
 
     $http.post('/api/groups', {id: user._id}).success(function (data) {
-      if (!group) {
+      if (!data.group) {
         $scope.belongGroup = false;
       } else {
         $scope.belongGroup = true;

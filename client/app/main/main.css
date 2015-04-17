@@ -1,3 +1,7 @@
+body {
+    font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,Osaka,"ＭＳ Ｐゴシック","MS PGothic",sans-serif;
+}
+
 #banner {
     border-bottom: none;
     margin-top: -20px;
@@ -60,6 +64,10 @@
     color: #FFF;
 }
 
+#login #mypage {
+    width: 274px;
+}
+
 .btn-common {
     width: 100%;
     margin-top: 50px;
@@ -83,8 +91,7 @@ table.nav img {
 
 table.nav p {
     border-bottom: 1px solid #DDD;
-    color: #55ACEE;
-    font-weight: bold;
+    color: #f0ad4e;
 }
 
 td.message {
@@ -104,11 +111,16 @@ td.message {
         margin-top: 10px;
     }
 
-    #login {
-        float: none;
+    img.detail {
+        max-width: 80% !important;
+        max-height: 80% !important;
     }
 
-    div.main-text {
-        visibility: hidden;
+    #banner h1 {
+        font-size: 20px;
+    }
+
+    #login {
+        float: none;
     }
 }
