@@ -5,8 +5,10 @@ var controller = require('./thing.controller');
 
 var router = express.Router();
 
+// native only
 router.get('/', controller.index);
-router.get('/flow', controller.show);
 router.post('/info', controller.info);
+// web only
+router.get('/flow', controller.show);
 
 module.exports = router;

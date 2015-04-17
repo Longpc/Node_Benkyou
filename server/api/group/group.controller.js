@@ -8,11 +8,11 @@ var User = require('../user/user.model');
 
 // Get a single group
 exports.show = function(req, res) {
-  var data = App.receiveReqData(req.body);
+  var reqData = App.receiveReqData(req.body);
   var startOfMonth = moment().utc().add(9, 'hours').startOf('month');
   var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
   var data = {
-    user_ids: req.params.id,
+    user_ids: reqData.id,
     date: {
       "$gte": startOfMonth,
       "$lte": endOfMonth

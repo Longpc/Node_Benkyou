@@ -5,6 +5,7 @@ var controller = require('./group.controller');
 
 var router = express.Router();
 
-router.get('/:id', controller.show);
+// web and native
+router.post('/', controller.show);
 
 module.exports = router;

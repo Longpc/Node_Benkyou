@@ -15,7 +15,7 @@ angular.module('shufflelunchApp')
     $scope.thisMonth = month + 1;
     $scope.isLeader = false;
 
-    $http.get('/api/attends/' + user._id).success(function (status) {
+    $http.post('/api/attends/', {id: user._id}).success(function (status) {
       if (status.result == 1) {
         $scope.attendStatus = '参加';
         $scope.statusValue = 1;
@@ -27,7 +27,7 @@ angular.module('shufflelunchApp')
       }
     });
 
-    $http.get('/api/groups/'+ user._id).success(function (data) {
+    $http.post('/api/groups', {id: user._id}).success(function (data) {
       if (!group) {
         $scope.belongGroup = false;
       } else {
@@ -40,10 +40,10 @@ angular.module('shufflelunchApp')
 
     $scope.changeAttendStatus = function() {
       var data = {
-        user_id: user._id,
+        id: user._id,
         status: $scope.statusValue
       };
-      $http.post('/api/attends', data).success(function(beforeStatus) {
+      $http.post('/api/attends/change', data).success(function(beforeStatus) {
         if (beforeStatus.result == 1) {
           $scope.attendStatus = '不参加';
           $scope.statusValue = 2;

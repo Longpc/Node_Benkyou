@@ -9,7 +9,7 @@ var Attend = require('./attend.model');
 exports.show = function(req, res) {
   var jtime = moment().utc().add(9, 'hours').add(1, 'months');
   var data = {
-    user_id: req.params.id,
+    user_id: req.body.id,
     active: false,
     year: jtime.year(),
     month: jtime.month() + 1
@@ -28,7 +28,7 @@ exports.upsert = function(req, res) {
   var reqData = App.receiveReqData(req.body);
   var jtime = moment().utc().add(9, 'hours').add(1, 'months');
   var data = {
-    user_id: reqData.user_id,
+    user_id: reqData.id,
     year: jtime.year(),
     month: jtime.month() + 1
   };
@@ -39,7 +39,7 @@ exports.upsert = function(req, res) {
   Attend.update(data, {$set: {active: changedStatus}}, {upsert: true, multi: false}, function(err, attend) {
     if(err) { return handleError(res, err, req.body); }
     var resData = { 'result': reqData.status };
-    return res.json(resData);
+    return res.json(200, App.makeResData(resData, req.body, 0));
   });
 };
 

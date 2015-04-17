@@ -5,7 +5,9 @@ var controller = require('./attend.controller');
 
 var router = express.Router();
 
-router.get('/:id', controller.show);
-router.post('/', controller.upsert);
+// web only
+router.post('/', controller.show);
+// web and native
+router.post('/change', controller.upsert);
 
 module.exports = router;
