@@ -15,8 +15,8 @@ angular.module('shufflelunchApp')
     $scope.thisMonth = month + 1;
     $scope.isLeader = false;
 
-    $http.get('/api/attends', {params: {user_id: user._id}}).success(function (status) {
-      if (status == 1) {
+    $http.post('/api/attends/', {id: user._id}).success(function (status) {
+      if (status.result == 1) {
         $scope.attendStatus = '参加';
         $scope.statusValue = 1;
         $scope.changeBtnClass = 'btn-danger';
@@ -27,24 +27,24 @@ angular.module('shufflelunchApp')
       }
     });
 
-    $http.get('/api/groups', {params: {user_id: user._id}}).success(function (group) {
-      if (!group) {
+    $http.post('/api/groups', {id: user._id}).success(function (data) {
+      if (!data.group) {
         $scope.belongGroup = false;
       } else {
         $scope.belongGroup = true;
-        $scope.leader = group.leader_id;
-        $scope.members = group.user_ids;
-        if (group.leader_id._id == user._id) { $scope.isLeader = true; }
+        $scope.leader = data.group.leader_id;
+        $scope.members = data.group.user_ids;
+        if (data.group.leader_id._id == user._id) { $scope.isLeader = true; }
       }
     });
 
     $scope.changeAttendStatus = function() {
       var data = {
-        user_id: user._id,
+        id: user._id,
         status: $scope.statusValue
       };
-      $http.post('/api/attends', data).success(function(beforeStatus) {
-        if (beforeStatus == 1) {
+      $http.post('/api/attends/change', data).success(function(beforeStatus) {
+        if (beforeStatus.result == 1) {
           $scope.attendStatus = '不参加';
           $scope.statusValue = 2;
           $scope.changeBtnClass = 'btn-info';
@@ -65,14 +65,14 @@ angular.module('shufflelunchApp')
       if ($scope.newUser.password != $scope.confirm) { return $scope.wrongPassword = true; }
       $scope.wrongPassword = false;
 
-      $http.post('/api/users', $scope.newUser)
-        .success(function(user) {
-          if (user == 'email_duplicated') {
+      $http.post('/api/users', {'user': $scope.newUser})
+        .success(function(userData) {
+          if (userData.result == 2) { // email duplicated
             return $scope.emailDuplicated = true;
           }
 
-          delete user['password'];
-          $cookieStore.put('user', user)
+          delete userData.user.password;
+          $cookieStore.put('user', userData.user)
           return $location.path('/users');
         });
     };
@@ -88,7 +88,7 @@ angular.module('shufflelunchApp')
       if ($scope.updateUser === '') {
         return;
       }
-      $http.put('/api/users/' + user['_id'], $scope.loginUser)
+      $http.put('/api/users/' + user._id, $scope.loginUser)
         .success(function(user) {
           if (user == 'wrong_password') {
             return $scope.wrongPassword = true;

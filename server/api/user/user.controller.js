@@ -1,38 +1,25 @@
 'use strict';
 
-var crypto = require('crypto');
 var _ = require('lodash');
+var App = require('../app/app.model');
 var User = require('./user.model');
-
-// Get list of users
-exports.index = function(req, res) {
-  User.find(function (err, users) {
-    if(err) { return handleError(res, err); }
-    return res.json(200, users);
-  });
-};
-
-// Get a single user
-exports.show = function(req, res) {
-  User.findById(req.params.id, function (err, user) {
-    if(err) { return handleError(res, err); }
-    if(!user) { return res.send(404); }
-    return res.json(user);
-  });
-};
 
 // Creates a new user in the DB.
 exports.create = function(req, res) {
-  User.findOne({email: req.body.email}, function(err, user) {
-    if (user) {
-      return res.json(200, 'email_duplicated');
-    }
+  var data = App.receiveReqData(req.body);
+  User.count({email: data.user.email}, function(err, count) {
+    if(err) { return handleError(res, err, req.body); }
+    if (count !== 0) { return res.json(200, App.makeResData({'result': 2}, req.body, 0)); }
 
-    req.body.password = createHash(req.body.password);
-    User.create(req.body, function(err, user) {
-      if(err) { return handleError(res, err); }
+    data.user.password = User.createHash(data.user.password);
+    User.create(data.user, function(err, user) {
+      if(err) { return handleError(res, err, req.body); }
       req.session.user = user;
-      return res.json(201, user);
+      var userData = {
+        result: 1,
+        user: user
+      };
+      return res.json(201, App.makeResData(userData, req.body, 0));
     });
   });
 };
@@ -40,28 +27,16 @@ exports.create = function(req, res) {
 // Updates an existing user in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  req.body.password = createHash(req.body.password);
+  req.body.password = User.createHash(req.body.password);
 
   User.findOne({_id: req.params.id, password: req.body.password}, function (err, user) {
-    if (err) { return handleError(res, err); }
+    if (err) { return handleError(res, err, req.body); }
     if (!user) { return res.json(200, 'wrong_password'); }
     var updated = _.merge(user, req.body);
     updated.save(function (err) {
-      if (err) { return handleError(res, err); }
+      if (err) { return handleError(res, err, req.body); }
       req.session.user = user;
       return res.json(200, user);
-    });
-  });
-};
-
-// Deletes a user from the DB.
-exports.destroy = function(req, res) {
-  User.findById(req.params.id, function (err, user) {
-    if(err) { return handleError(res, err); }
-    if(!user) { return res.send(404); }
-    user.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
     });
   });
 };
@@ -76,12 +51,17 @@ exports.islogged = function(req, res) {
 };
 
 exports.login = function(req, res) {
-  User.findOne({email: req.body.email, password: createHash(req.body.password)}, function(err, user) {
+  var data = App.receiveReqData(req.body);
+  User.findOne({email: data.email, password: User.createHash(data.password)}, function(err, user) {
     if (user) {
       req.session.user = user;
-      return res.json(200, user);
+      var userData = {
+        result: 1,
+        user: user
+      };
+      return res.json(200, userData);
     }
-    return res.json(200, '');
+    return res.json(200, App.makeResData({'result': 3}, req.body, 0));
   });
 };
 
@@ -90,13 +70,6 @@ exports.logout = function(req, res) {
   return res.json(200, 'success');
 };
 
-function handleError(res, err) {
-  return res.send(500, err);
-}
-
-function createHash(password) {
-  var planeText = 'Plane Text';
-  var cipher = crypto.createCipher('aes192', password);
-  cipher.update(planeText, 'utf8', 'hex');
-  return cipher.final('hex');
+function handleError(res, err, reqBody) {
+  return res.json(500, App.makeResData(err, reqBody, 1));
 }
