@@ -9,7 +9,7 @@ exports.create = function(req, res) {
   var data = App.receiveReqData(req.body);
   User.count({email: data.user.email}, function(err, count) {
     if(err) { return handleError(res, err, req.body); }
-    if (count !== 0) { return res.json(200, App.makeResData({'result': 2}, req.body, 0)); }
+    if (count !== 0) { return res.json(200, App.makeResData({result: 2}, req.body, 0)); }
 
     data.user.password = User.createHash(data.user.password);
     User.create(data.user, function(err, user) {
@@ -26,17 +26,22 @@ exports.create = function(req, res) {
 
 // Updates an existing user in the DB.
 exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  req.body.password = User.createHash(req.body.password);
+  var data = App.receiveReqData(req.body)
+  if(data._id) { delete data._id; }
+  data.password = User.createHash(data.password);
 
-  User.findOne({_id: req.params.id, password: req.body.password}, function (err, user) {
+  User.findOne({_id: req.params.id, password: data.password}, function (err, user) {
     if (err) { return handleError(res, err, req.body); }
-    if (!user) { return res.json(200, 'wrong_password'); }
+    if (!user) { return res.json(200, App.makeResData({result: 2}, req.body, 0)); }
     var updated = _.merge(user, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err, req.body); }
       req.session.user = user;
-      return res.json(200, user);
+      var userData = {
+        result: 1,
+        user: user
+      };
+      return res.json(200, App.makeResData(userData, req.body, 0));
     });
   });
 };
@@ -53,15 +58,34 @@ exports.islogged = function(req, res) {
 exports.login = function(req, res) {
   var data = App.receiveReqData(req.body);
   User.findOne({email: data.email, password: User.createHash(data.password)}, function(err, user) {
-    if (user) {
-      req.session.user = user;
-      var userData = {
-        result: 1,
-        user: user
-      };
-      return res.json(200, userData);
+    if (err) { return handleError(res, err, req.body); }
+    if (!user) {
+      return res.json(200, App.makeResData({result: 3}, req.body, 0));
     }
-    return res.json(200, App.makeResData({'result': 3}, req.body, 0));
+
+    req.session.user = user;
+    var userData = {
+      result: 1,
+      user: user
+    };
+    return res.json(200, userData);
+  });
+};
+
+exports.auto = function(req, res) {
+  var data = App.receiveReqData(req.body);
+  User.findById(data.id, function(err, user) {
+    if (err) { return handleError(res, err, req.body); }
+    if (!user) {
+      return res.json(200, App.makeResData({result: 0}, req.body, 0));
+    }
+
+    req.session.user = user;
+    var userData = {
+      result: 1,
+      user: user
+    };
+    return res.json(200, userData);
   });
 };
 

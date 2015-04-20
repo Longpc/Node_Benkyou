@@ -14,4 +14,7 @@ router.put('/:id', controller.update);
 router.post('/islogged', controller.islogged);
 router.post('/logout', controller.logout);
 
+// native only
+router.post('/auto', controller.auto);
+
 module.exports = router;

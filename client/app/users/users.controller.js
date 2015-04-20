@@ -89,12 +89,12 @@ angular.module('shufflelunchApp')
         return;
       }
       $http.put('/api/users/' + user._id, $scope.loginUser)
-        .success(function(user) {
-          if (user == 'wrong_password') {
+        .success(function(data) {
+          if (data.result === 2) {
             return $scope.wrongPassword = true;
           }
-          delete user['password'];
-          $cookieStore.put('user', user)
+          delete data.user['password'];
+          $cookieStore.put('user', data.user)
           return $location.path('/users');
         });
     };

@@ -1,7 +1,8 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /things              ->  index
- * GET     /things/flow          ->  show
+ * GET     /things/flow         ->  show
+ * GET     /thing/info          ->  info
  */
 
 'use strict';
@@ -44,6 +45,9 @@ exports.info = function(req, res) {
     .populate('user_id', 'name')
     .exec(function (err, blogs) {
       if(err) { return handleError(res, err, req.body); }
+
+      // commentが20文字より長い場合は20文字にカット
+      if (blogs.comment.length > 20) { blogs.comment.substr(0, 20); }
 
       var jtime = moment().utc().add(9, 'hours').add(1, 'months');
       var query = {
