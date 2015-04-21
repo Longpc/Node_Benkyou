@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var fs = require('fs')
+var config = require('../../config/environment/');
 var App = require('../app/app.model');
 var Blog = require('./blog.model');
 
@@ -12,7 +13,7 @@ exports.index = function(req, res) {
     .populate('user_id', 'name')
     .exec(function (err, blogs) {
       if(err) { return handleError(res, err, req.body); }
-      return res.json(200, App.makeResData(blogs, req.body, 0));
+      return res.json(200, App.makeResData(blogs, req.body));
     });
 };
 
@@ -22,12 +23,12 @@ exports.show = function(req, res) {
     .populate('user_id', 'name')
     .exec(function (err, blog) {
       if(err) { return handleError(res, err, req.body); }
-      if(!blog) { return res.json(404, App.makeResData({result: 0})); }
+      if(!blog) { return res.json(404, App.makeResData({result: config.api.result.error}, req.body)); }
       var data = {
-        result: 1,
+        result: config.api.result.success,
         blog: blog
       };
-      return res.json(200, App.makeResData(data, req.body, 0));
+      return res.json(200, App.makeResData(data, req.body));
     });
 };
 
@@ -66,5 +67,5 @@ exports.create = function(req, res) {
 };
 
 function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, 1));
+  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
 }
