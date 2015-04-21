@@ -38,7 +38,7 @@ function isNativeApp(reqBody) {
   if ('data' in reqBody) {
     if ('common' in reqBody.data) {
       if ('device' in reqBody.data.common) {
-        if (reqBody.data.common.device === 1) return true;
+        if (reqBody.data.common.device === '1') return true;
       }
     }
   }

@@ -71,6 +71,22 @@ var all = {
     {name: 'デザイン統括', english_name: 'design'}
   ],
 
+  api: {
+    code: {
+      success: '0',
+      error: '1'
+    },
+    result: {
+      error: '0',
+      success: '1',
+      email: '2',
+      password: '3'
+    },
+    attend: {
+      yes: '1',
+      no: '2'
+    }
+  }
 };
 
 // Export the config object based on the NODE_ENV

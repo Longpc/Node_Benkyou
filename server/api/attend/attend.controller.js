@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var moment = require('moment');
 var App = require('../app/app.model');
+var config = require('../../config/environment/');
 var Attend = require('./attend.model');
 
 // Get list of attends
@@ -18,8 +19,8 @@ exports.show = function(req, res) {
   // 来月の参加しない状態（active: false）のレコード件数を取得
   Attend.count(data, function (err, count) {
     if(err) { return handleError(res, err, req.body); }
-    if(count === 0) { return res.json(200, { 'result': 1 }); } // 参加
-    return res.json(200, { 'result': 2 }); // 不参加
+    if(count === 0) { return res.json(200, {result: config.api.attend.yes}); } // 参加
+    return res.json(200, {result: config.api.attend.no}); // 不参加
   });
 };
 
@@ -34,15 +35,15 @@ exports.upsert = function(req, res) {
   };
   // status: 1 => 参加から不参加
   // status: 2 => 不参加から参加
-  var changedStatus = (reqData.status === 1) ? false : true;
+  var changedStatus = (reqData.status === config.api.attend.yes) ? false : true;
 
   Attend.update(data, {$set: {active: changedStatus}}, {upsert: true, multi: false}, function(err, attend) {
     if(err) { return handleError(res, err, req.body); }
-    var resData = { 'result': reqData.status };
-    return res.json(200, App.makeResData(resData, req.body, 0));
+    var resData = {result: reqData.status};
+    return res.json(200, App.makeResData(resData, req.body));
   });
 };
 
 function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, 1));
+  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
 }

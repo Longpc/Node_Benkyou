@@ -3,6 +3,8 @@
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var fs = require('fs')
+var config = require('../../config/environment/');
+var App = require('../app/app.model');
 var Blog = require('./blog.model');
 
 // Get list of blogs
@@ -10,18 +12,24 @@ exports.index = function(req, res) {
   Blog.find()
     .populate('user_id', 'name')
     .exec(function (err, blogs) {
-      if(err) { return handleError(res, err); }
-      return res.json(200, blogs);
+      if(err) { return handleError(res, err, req.body); }
+      return res.json(200, App.makeResData(blogs, req.body));
     });
 };
 
 // Get a single blog
 exports.show = function(req, res) {
-  Blog.findById(req.params.id, function (err, blog) {
-    if(err) { return handleError(res, err); }
-    if(!blog) { return res.send(404); }
-    return res.json(blog);
-  });
+  Blog.findById(req.params.id)
+    .populate('user_id', 'name')
+    .exec(function (err, blog) {
+      if(err) { return handleError(res, err, req.body); }
+      if(!blog) { return res.json(404, App.makeResData({result: config.api.result.error}, req.body)); }
+      var data = {
+        result: config.api.result.success,
+        blog: blog
+      };
+      return res.json(200, App.makeResData(data, req.body));
+    });
 };
 
 // Creates a new blog in the DB.
@@ -58,32 +66,6 @@ exports.create = function(req, res) {
   });
 };
 
-// Updates an existing blog in the DB.
-exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-  Blog.findById(req.params.id, function (err, blog) {
-    if (err) { return handleError(res, err); }
-    if(!blog) { return res.send(404); }
-    var updated = _.merge(blog, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, blog);
-    });
-  });
-};
-
-// Deletes a blog from the DB.
-exports.destroy = function(req, res) {
-  Blog.findById(req.params.id, function (err, blog) {
-    if(err) { return handleError(res, err); }
-    if(!blog) { return res.send(404); }
-    blog.remove(function(err) {
-      if(err) { return handleError(res, err); }
-      return res.send(204);
-    });
-  });
-};
-
-function handleError(res, err) {
-  return res.send(500, err);
+function handleError(res, err, reqBody) {
+  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
 }

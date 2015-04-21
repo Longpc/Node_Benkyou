@@ -1,13 +1,15 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /things              ->  index
- * GET     /things/flow          ->  show
+ * GET     /things/flow         ->  show
+ * GET     /thing/info          ->  info
  */
 
 'use strict';
 
 var _ = require('lodash');
 var moment = require('moment');
+var config = require('../../config/environment/');
 var App = require('../app/app.model.js');
 var Thing = require('./thing.model');
 var Department = require('../department/department.model');
@@ -45,6 +47,11 @@ exports.info = function(req, res) {
     .exec(function (err, blogs) {
       if(err) { return handleError(res, err, req.body); }
 
+      // commentが20文字より長い場合は20文字にカット
+      blogs.forEach(function(value, i) {
+        if (blogs[i].comment.length > 20) { blogs[i].comment.substr(0, 20); }
+      });
+
       var jtime = moment().utc().add(9, 'hours').add(1, 'months');
       var query = {
         user_id: data.id,
@@ -56,9 +63,9 @@ exports.info = function(req, res) {
       // 来月の参加しない状態（active: false）のレコード件数を取得
       Attend.count(data, function (err, count) {
         if(err) { return handleError(res, err, req.body); }
-        var result = (count === 0) ? 1 : 2;
+        var result = (count === 0) ? config.api.attend.yes : config.api.attend.no;
         var resData = {
-          'result': 1,
+          'result': config.api.result.success,
           'blogs': blogs,
           'attend': result
         };
@@ -68,5 +75,5 @@ exports.info = function(req, res) {
 };
 
 function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, 1));
+  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
 }

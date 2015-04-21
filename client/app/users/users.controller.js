@@ -16,14 +16,16 @@ angular.module('shufflelunchApp')
     $scope.isLeader = false;
 
     $http.post('/api/attends/', {id: user._id}).success(function (status) {
-      if (status.result == 1) {
+      if (status.result === '1') {
         $scope.attendStatus = '参加';
-        $scope.statusValue = 1;
+        $scope.nextStatus = '不参加';
+        $scope.statusValue = '1';
         $scope.changeBtnClass = 'btn-danger';
       } else {
         $scope.attendStatus = '不参加';
-        $scope.statusValue = 2;
-        $scope.changeBtnClass = 'btn-info';
+        $scope.nextStatus = '参加';
+        $scope.statusValue = '2';
+        $scope.changeBtnClass = 'btn-warning';
       }
     });
 
@@ -46,11 +48,13 @@ angular.module('shufflelunchApp')
       $http.post('/api/attends/change', data).success(function(beforeStatus) {
         if (beforeStatus.result == 1) {
           $scope.attendStatus = '不参加';
-          $scope.statusValue = 2;
-          $scope.changeBtnClass = 'btn-info';
+          $scope.nextStatus = '参加';
+          $scope.statusValue = '2';
+          $scope.changeBtnClass = 'btn-warning';
         } else {
           $scope.attendStatus = '参加';
-          $scope.statusValue = 1;
+          $scope.nextStatus = '不参加';
+          $scope.statusValue = '1';
           $scope.changeBtnClass = 'btn-danger';
         }
       });
@@ -67,7 +71,7 @@ angular.module('shufflelunchApp')
 
       $http.post('/api/users', {'user': $scope.newUser})
         .success(function(userData) {
-          if (userData.result == 2) { // email duplicated
+          if (userData.result === '2') { // email duplicated
             return $scope.emailDuplicated = true;
           }
 
@@ -89,12 +93,12 @@ angular.module('shufflelunchApp')
         return;
       }
       $http.put('/api/users/' + user._id, $scope.loginUser)
-        .success(function(user) {
-          if (user == 'wrong_password') {
+        .success(function(data) {
+          if (data.result === '3') {
             return $scope.wrongPassword = true;
           }
-          delete user['password'];
-          $cookieStore.put('user', user)
+          delete data.user['password'];
+          $cookieStore.put('user', data.user)
           return $location.path('/users');
         });
     };
