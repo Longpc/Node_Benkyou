@@ -82,7 +82,7 @@ h2.page-header {
 
 table.nav {
     text-align: center;
-    margin-bottom: 50px;
+    margin-right: 25px;
 }
 
 table.nav img {
@@ -97,6 +97,21 @@ table.nav p {
 td.message {
     padding-top: 20px;
     vertical-align: bottom;
+    height: 90px;
+}
+
+@media only screen and (max-width: 1000px) {
+    table.nav {
+        margin-right: 0;
+        width: 100%;
+    }
+    table.nav img {
+        width: 20%;
+        margin-top: 10px;
+    }
+    td.message {
+        height: 50px;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -106,9 +121,14 @@ td.message {
         display: block;
     }
 
+    table.nav {
+        margin-right: 0;
+        width: 100%;
+    }
+
     table.nav img {
         width: 20%;
-        margin-top: 10px;
+        margin-top: 30px;
     }
 
     img.detail {
