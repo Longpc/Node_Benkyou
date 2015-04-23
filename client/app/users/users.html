@@ -3,18 +3,21 @@
 <div class="container">
   <div class="row" id="attend">
     <div class="col-md-7">
-      <h2>シャッフルランチ{{nextMonth}}月度：{{attendStatus}}</h2>
+      <h2>シャッフルランチ{{nextMonth}}月度</h2>
     </div>
     <div class="col-md-5">
       <button type="submit" class="btn" ng-class="changeBtnClass" ng-click="changeAttendStatus()" value="{{statusValue}}">
-        {{attendStatus}}を取り消す
+        {{nextStatus}}にする
       </button>
+      <p>※現在あなたは{{attendStatus}}の状態です</p>
     </div>
   </div>
 
   <div class="row" id="group">
-    <div class="col-md-7" ng-show="belongGroup">
+    <div class="col-md-12">
       <h2>{{thisMonth}}月のグループ</h2>
+    </div>
+    <div class="col-md-7" ng-show="belongGroup">
       <div class="group-info">
         <ul class="list-group">
           <li class="list-group-item list-group-item-warning">
@@ -28,7 +31,6 @@
       </div>
     </div>
     <div class="col-md-7" ng-show="!belongGroup">
-      <h2>{{thisMonth}}月のグループ</h2>
       <h4>今月のランチには参加していません</h4>
     </div>
 

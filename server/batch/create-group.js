@@ -1,14 +1,12 @@
 // グループ作成の流れ
 // 1. 参加するユーザ一覧を取得
 // 2. ランダムに100通りの組合せを作成
-// 3. 関数を作成し, 組合せのコストを計算
+// 3. コスト関数により組合せのコストを計算
 // (メモリを考えると1ずつ通り生成してコスト計算していった方がよい)
 // 4. 最小のコストの組合せを選択
-// node create-group.js
-
-console.log('start');
 
 var moment = require('moment');
+var async = require('async')
 var batch = require('../batch').batch;
 var User = require('../api/user/user.model');
 var Group = require('../api/group/group.model');
@@ -22,47 +20,51 @@ var jtime = moment().utc().add(9, 'hours');
 var year = jtime.year();
 var month = jtime.month() + 1;
 
-// 参加するユーザ一覧を取得
-Attend.find({active: false, year: year, month: month}, function(err, attends) {
-  notAttendIds = attends.map(function(v) { return v.user_id; });
-  User.find({_id: { $nin: notAttendIds }}, null, { timeout: false }, function(err, users) {
-    var minCost = 1000000;
-    var bestGroup = [];
-    var userCount = users.length;
-    if (userCount < MEMBER_LIMIT) {
-      process.exit();
-    }
-    var member = (userCount < MEMBER_CHANGE_VALUE) ? 4 : 5;
-    for (var i = 0; i < N; i++) {
-      var cost = 0;
-      var groups = createRandomGroup(users, member); // blocking function
-      groups.forEach(function(group) {
-        cost += calcCostByGroup(group); // blocking function
-      });
-      if (cost < minCost) {
-        minCost = cost;
-        bestGroup = groups;
+// 参加するユーザ一覧を取得する関数
+exports.createGroup = function(leaderFunction, messageFunction, done) {
+  Attend.find({active: false, year: year, month: month}, function(err, attends) {
+    notAttendIds = attends.map(function(v) { return v.user_id; });
+    User.find({_id: { $nin: notAttendIds }}, null, { timeout: false }, function(err, users) {
+      var minCost = 1000000;
+      var bestGroup = [];
+      var userCount = users.length;
+      if (userCount < MEMBER_LIMIT) {
+        process.exit('Not enough members');
       }
-    }
+      var member = (userCount < MEMBER_CHANGE_VALUE) ? 4 : 5;
+      for (var i = 0; i < N; i++) {
+        var cost = 0;
+        var groups = createRandomGroup(users, member); // blocking function
+        groups.forEach(function(group) {
+          cost += calcCostByGroup(group); // blocking function
+        });
+        if (cost < minCost) {
+          minCost = cost;
+          bestGroup = groups;
+        }
+      }
 
-    // bestGroupをDBへ保存
-    bestGroup.forEach(function(bg, i) {
-      var userIds = bg.map(function(v) { return v.id; });
-      var writeBlog = (i == 0) ? true : false;
-      var newGroup = {
-        date: jtime,
-        write_blog: writeBlog,
-        user_ids: userIds
-      };
-      Group.create(newGroup, function(err, group) {
+      // bestGroupをDBへ保存
+      async.each(bestGroup, function(group, callback) {
+        var userIds = group.map(function(v) { return v.id; });
+        var newGroup = {
+          date: jtime,
+          user_ids: userIds
+        };
+        Group.create(newGroup, function(err, group) {
+          if (err) { console.log(err); }
+          callback();
+        });
+      }, function (err) {
         if (err) { console.log(err); }
-        console.log('group created');
+        console.log('Create group finished successfly');
+        leaderFunction(messageFunction, done);
       });
     });
   });
-});
+}
 
-// ユーザーをシャッフルした後, 最後からm人ずつグループを作成していく
+// ユーザーをシャッフルした後, users配列の後ろからmember人ずつグループを作成していく
 // ユーザーがm人未満になったら, すでにできているグループに1人ずつ追加していく
 function createRandomGroup(users, member) {
   var groups = [];

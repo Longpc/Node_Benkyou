@@ -4,6 +4,7 @@ angular.module('shufflelunchApp')
   .config(function ($routeProvider) {
     var requireAuth = {
       login: function($q, $location, $http, $cookieStore) {
+        if ($cookieStore.get('user')) return true;
         $http.post('/api/users/islogged').success(function(user) {
           if (user == '') {
             $location.path('/');
