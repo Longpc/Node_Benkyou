@@ -5,13 +5,11 @@
 'use strict';
 
 var express = require('express');
-var session = require('express-session');
 var favicon = require('serve-favicon');
 var morgan = require('morgan');
 var compression = require('compression');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var path = require('path');
 var config = require('./environment');
@@ -26,16 +24,6 @@ module.exports = function(app) {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(methodOverride());
-  app.use(cookieParser());
-  app.use(session({
-    cookie: {
-      maxAge: config.session_timeout,
-      expires: config.session_timeout,
-    },
-    secret: config.secrets.session,
-    saveUninitialized: false,
-    resave: false
-  }));
 
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
