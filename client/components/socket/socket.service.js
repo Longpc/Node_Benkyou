@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .factory('socket', function(socketFactory) {
+  .factory('socket', ['socketFactory', function(socketFactory) {
 
     // socket.io now auto-configures its connection when we ommit a connection url
     var ioSocket = io('', {
@@ -71,4 +71,4 @@ angular.module('shufflelunchApp')
         socket.removeAllListeners(modelName + ':remove');
       }
     };
-  });
+  }]);
