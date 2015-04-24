@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('BlogsCtrl', function ($scope, $http, socket, $location) {
+  .controller('BlogsCtrl', ['$scope', '$http', 'socket', '$location', function ($scope, $http, socket, $location) {
     $scope.datePickerOpen = false;
 
     $scope.toggleDatePicker = function($event) {
@@ -10,4 +10,4 @@ angular.module('shufflelunchApp')
       $scope.datePickerOpen = !$scope.datePickerOpen;
     };
 
-  });
+  }]);

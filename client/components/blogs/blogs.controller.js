@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('BlogListsCtrl', function ($scope, $modal, $rootScope, $http, $location) {
+  .controller('BlogListsCtrl', ['$scope', '$modal', '$rootScope', '$http', '$location', function ($scope, $modal, $rootScope, $http, $location) {
     var modalInstance;
 
     $http.get('/api/blogs').success(function(blogs) {
@@ -21,4 +21,4 @@ angular.module('shufflelunchApp')
         modalInstance.dismiss();
       }
     });
-  });
+  }]);

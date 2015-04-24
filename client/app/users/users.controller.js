@@ -5,7 +5,7 @@ angular.module('shufflelunchApp')
     this.formCreate = createFormParts;
   })
 
-  .controller('UsersCtrl', function ($scope, $http, $cookieStore) {
+  .controller('UsersCtrl', ['$scope', '$http', '$cookieStore', function ($scope, $http, $cookieStore) {
     var user = $cookieStore.get('user');
     $scope.user = user;
 
@@ -59,9 +59,9 @@ angular.module('shufflelunchApp')
         }
       });
     };
-  })
+  }])
 
-  .controller('NewCtrl', function ($scope, $location, $http, socket, $cookieStore, formService) {
+  .controller('NewCtrl', ['$scope', '$location', '$http', 'socket', '$cookieStore', 'formService', function ($scope, $location, $http, socket, $cookieStore, formService) {
     formService.formCreate($scope, $http, socket);
 
     $scope.createUser = function() {
@@ -80,9 +80,9 @@ angular.module('shufflelunchApp')
           return $location.path('/users');
         });
     };
-  })
+  }])
 
-  .controller('EditCtrl', function($scope, $location, $http, socket, $cookieStore, formService) {
+  .controller('EditCtrl', ['$scope', '$location', '$http', 'socket', '$cookieStore', 'formService', function($scope, $location, $http, socket, $cookieStore, formService) {
     formService.formCreate($scope, $http, socket);
 
     var user = $cookieStore.get('user');
@@ -102,15 +102,15 @@ angular.module('shufflelunchApp')
           return $location.path('/users');
         });
     };
-  })
+  }])
 
-  .controller('LogoutCtrl', function($scope, $location, $http, $cookieStore) {
+  .controller('LogoutCtrl', ['$scope', '$location', '$http', '$cookieStore', function($scope, $location, $http, $cookieStore) {
     var user = $cookieStore.get('user');
     $http.post('/api/users/logout').success(function(response) {
       $cookieStore.remove('user');
       return $location.path('/');
     });
-  });
+  }]);
 
 var createFormParts = function($scope, $http, socket) {
     $scope.departments = [];

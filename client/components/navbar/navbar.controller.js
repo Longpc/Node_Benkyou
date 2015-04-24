@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('NavbarCtrl', function ($scope, $location) {
+  .controller('NavbarCtrl', ['$scope', '$location', function ($scope, $location) {
     $scope.menu = [{
       'title': 'レポート投稿',
       'link': '/blogs'
@@ -18,4 +18,4 @@ angular.module('shufflelunchApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-  });
+  }]);
