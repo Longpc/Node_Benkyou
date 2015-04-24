@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .controller('MainCtrl', function ($scope, $location, $http, $cookieStore) {
+  .controller('MainCtrl', ['$scope', '$location', '$http', '$cookieStore', function ($scope, $location, $http, $cookieStore) {
     var user = $cookieStore.get('user');
     $scope.awesomeThings = [];
     $scope.isLogged = (user) ? true : false;
@@ -22,4 +22,4 @@ angular.module('shufflelunchApp')
         }
       });
     };
-  });
+  }]);

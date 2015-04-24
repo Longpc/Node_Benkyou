@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('shufflelunchApp')
-  .config(function ($routeProvider) {
+  .config(['$routeProvider', function ($routeProvider) {
     var requireAuth = {
-      login: function($q, $location, $http, $cookieStore) {
+      login: ['$q', '$location', '$http', '$cookieStore', function($q, $location, $http, $cookieStore) {
         if ($cookieStore.get('user')) return true;
         $http.post('/api/users/islogged').success(function(user) {
           if (user == '') {
@@ -13,7 +13,7 @@ angular.module('shufflelunchApp')
           delete user['password'];
           return $cookieStore.put('user', user);
         })
-      }
+      }]
     };
 
     $routeProvider
@@ -36,4 +36,4 @@ angular.module('shufflelunchApp')
         controller: 'LogoutCtrl',
         resolve: requireAuth
       });
-  });
+  }]);
