@@ -3,6 +3,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 var crypto = require('crypto');
+var Puid = require('puid');
+var puid = new Puid();
 
 var UserSchema = new Schema({
   name: String,
@@ -11,6 +13,10 @@ var UserSchema = new Schema({
   department: String,
   sex: String,
   occupation: String,
+  uuid: { type: String, default: puid.generate() },
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
+  disabled: { type: Boolean, default: false }
 });
 
 UserSchema.static('createHash', function(password) {
@@ -19,5 +25,13 @@ UserSchema.static('createHash', function(password) {
   cipher.update(planeText, 'utf8', 'hex');
   return cipher.final('hex');
 });
+
+UserSchema.pre('save', function(next) {
+  var now = new Date();
+  this.updated_at = now;
+  if (! this.created_at) { this.created_at = now; }
+  next();
+});
+
 
 module.exports = mongoose.model('User', UserSchema);

@@ -6,7 +6,10 @@ var mongoose = require('mongoose'),
 var AppSchema = new Schema({
   name: String,
   info: String,
-  active: Boolean
+  active: Boolean,
+  created_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: Date.now },
+  disabled: { type: Boolean, default: false }
 });
 
 AppSchema.static('receiveReqData', function(reqBody) {
@@ -32,7 +35,12 @@ AppSchema.static('makeResData', function(resObject, reqBody, errorCode) {
   return resObject;
 });
 
-module.exports = mongoose.model('App', AppSchema);
+AppSchema.pre('save', function(next) {
+  var now = new Date();
+  this.updated_at = now;
+  if (! this.created_at) { this.created_at = now; }
+  next();
+});
 
 function isNativeApp(reqBody) {
   if ('data' in reqBody) {
@@ -44,3 +52,5 @@ function isNativeApp(reqBody) {
   }
   return false;
 }
+
+module.exports = mongoose.model('App', AppSchema);

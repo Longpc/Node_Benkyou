@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var fs = require('fs')
+var Puid = require('puid');
 var config = require('../../config/environment/');
 var App = require('../app/app.model');
 var Blog = require('./blog.model');
@@ -34,10 +35,10 @@ exports.show = function(req, res) {
 
 // Creates a new blog in the DB.
 exports.create = function(req, res) {
-  if (!req.session.user) { return res.status(401).redirect('/'); }
+  if (!req.session.user) { return res.redirect('/'); }
   var form = new multiparty.Form();
   form.parse(req, function(err, fields, files) {
-    if (err) { return res.status(500).redirect('/users'); }
+    if (err) { return res.redirect('/users'); }
 
     files.file.forEach(function(file) {
       var dir = file.path.split('/');
@@ -45,7 +46,7 @@ exports.create = function(req, res) {
       var newPath = 'client/assets/images/blogs/' + filename;
 
       fs.rename(file.path, newPath, function(err) {
-        if (err) { return res.status(500).redirect('/users'); }
+        if (err) { return res.redirect('/users'); }
 
         var blogData = {
           date: fields.date,
@@ -57,11 +58,26 @@ exports.create = function(req, res) {
         };
 
         Blog.create(blogData, function(err, blog) {
-          if (err) { return res.status(500).redirect('/users'); }
-          // return res.redirect(201, '/users');
-          return res.status(201).redirect('/users');
+          if (err) { return res.redirect('/users'); }
+          return res.redirect('/users');
         });
       });
+    });
+  });
+};
+
+exports.createNative = function(req, res) {
+  var data = App.receiveReqData(req.body);
+  var puid = new Puid('sl');
+  var filename = puid.generate();
+
+  var buffer = new Buffer(data.file, 'base64')
+  fs.writeFile('client/assets/images/blogs/' + filename, buffer, function(err, str) {
+    if (err) { console.log(err); }
+    data.file = '/assets/images/blogs/' + filename;
+    Blog.create(data, function(err, blog) {
+      if (err) { console.log(err); }
+      return res.json(201, App.makeResData(data, req.body));
     });
   });
 };
