@@ -29,11 +29,10 @@ exports.create = function(req, res) {
 exports.update = function(req, res) {
   var data = App.receiveReqData(req.body)
   if(data._id) { delete data._id; }
-  data.password = User.createHash(data.password);
 
-  User.findOne({_id: req.params.id, password: data.password}, function (err, user) {
+  User.findById(req.params.id, function (err, user) {
     if (err) { return handleError(res, err, req.body); }
-    if (!user) { return res.json(200, App.makeResData({result: config.api.result.password}, req.body)); }
+    if (!user) { return handleError(res, err, req.body); }
     var updated = _.merge(user, data);
     updated.save(function (err) {
       if (err) { return handleError(res, err, req.body); }

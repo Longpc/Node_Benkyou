@@ -29,14 +29,6 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="password" class="col-md-3">パスワードを入力してください</label>
-    <div class="col-md-9">
-      <input type="password" name="password" class="form-control" id="password" ng-model="loginUser.password" required>
-      <span class="unique error" ng-show="wrongPassword">パスワードが間違っています</span>
-    </div>
-  </div>
-
   <div class="submit">
     <input class="btn btn-warning btn-common" type="submit" value="更新" ng-disabled="loginUser.$invalid">
   </div>
