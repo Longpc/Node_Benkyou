@@ -94,9 +94,6 @@ angular.module('shufflelunchApp')
       }
       $http.put('/api/users/' + user._id, $scope.loginUser)
         .success(function(data) {
-          if (data.result === '3') {
-            return $scope.wrongPassword = true;
-          }
           delete data.user['password'];
           $cookieStore.put('user', data.user)
           return $location.path('/users');
