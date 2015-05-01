@@ -35,6 +35,7 @@ exports.show = function(req, res) {
 
 // Creates a new blog in the DB.
 exports.create = function(req, res) {
+  // sessionがない場合はtopにredirect
   if (!req.session.user) { return res.redirect('/'); }
   var form = new multiparty.Form();
   form.parse(req, function(err, fields, files) {
@@ -70,14 +71,18 @@ exports.createNative = function(req, res) {
   var data = App.receiveReqData(req.body);
   var puid = new Puid('sl');
   var filename = puid.generate();
-
   var buffer = new Buffer(data.file, 'base64')
+
   fs.writeFile('client/assets/images/blogs/' + filename, buffer, function(err, str) {
     if (err) { console.log(err); }
-    data.file = '/assets/images/blogs/' + filename;
+    data.image_path = '/assets/images/blogs/' + filename;
     Blog.create(data, function(err, blog) {
       if (err) { console.log(err); }
-      return res.json(201, App.makeResData(data, req.body));
+      var result = {
+        result: config.api.result.success,
+        blog: blog
+      };
+      return res.json(201, App.makeResData(result, req.body));
     });
   });
 };

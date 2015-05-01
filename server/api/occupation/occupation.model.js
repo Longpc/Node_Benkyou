@@ -4,11 +4,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var OccupationSchema = new Schema({
-  name: String,
-  english_name: String,
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
-  disabled: { type: Boolean, default: false }
+  name: { type: String, required: true },
+  english_name: { type: String, required: true },
+  created_at: { type: Date, required: true, default: Date.now },
+  updated_at: { type: Date, required: true, default: Date.now },
+  disabled: { type: Boolean, required: true, default: false }
 });
 
 OccupationSchema.pre('save', function(next) {

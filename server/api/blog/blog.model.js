@@ -4,15 +4,15 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BlogSchema = new Schema({
-  place: String,
-  date: String,
-  member: String,
-  comment: String,
-  image_path: String,
-  user_id: { type: Schema.Types.ObjectId, ref: 'User' },
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
-  disabled: { type: Boolean, default: false }
+  place: { type: String, required: true },
+  date: { type: String, required: true },
+  member: { type: String, required: true },
+  comment: { type: String, required: true },
+  image_path: { type: String, required: true },
+  user_id: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  created_at: { type: Date, required: true, default: Date.now },
+  updated_at: { type: Date, required: true, default: Date.now },
+  disabled: { type: Boolean, required: true, default: false }
 });
 
 BlogSchema.pre('save', function(next) {

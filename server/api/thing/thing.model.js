@@ -4,11 +4,11 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ThingSchema = new Schema({
-  name: String,
-  image_path: String,
-  created_at: { type: Date, default: Date.now },
-  updated_at: { type: Date, default: Date.now },
-  disabled: { type: Boolean, default: false }
+  name: { type: String, required: true },
+  image_path: { type: String, required: true },
+  created_at: { type: Date, required: true, default: Date.now },
+  updated_at: { type: Date, required: true, default: Date.now },
+  disabled: { type: Boolean, required: true, default: false }
 });
 
 ThingSchema.pre('save', function(next) {
