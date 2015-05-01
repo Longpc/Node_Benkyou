@@ -7,11 +7,10 @@ var router = express.Router();
 
 // web only
 router.get('/', controller.index);
+router.post('/post', controller.create);
 
 // native only
 router.get('/:id', controller.show);
-
-// web and native
-router.post('/', controller.create);
+router.post('/', controller.createNative);
 
 module.exports = router;
