@@ -23,17 +23,22 @@ exports.show = function(req, res) {
   Group.findOne(data)
     .populate('leader_id')
     .populate('user_ids')
-    .exec(function (err, groups) {
+    .exec(function (err, group) {
+      var groupData;
       if(err) { return handleError(res, err, req.body); }
-      if (groups) {
-        groups.user_ids.forEach(function(m, i) {
-          if (m.id === groups.leader_id.id) { groups.user_ids.splice(i, 1); }
+      if (group) {
+        group.user_ids.forEach(function(m, i) {
+          if (m.id === group.leader_id.id) { group.user_ids.splice(i, 1); }
         });
+        groupData = {
+          result: config.api.result.success,
+          group: group
+        };
+      } else {
+        groupData = {
+          result: config.api.result.error
+        };
       }
-      var groupData = {
-        result: config.api.result.success,
-        group: groups
-      };
       return res.json(200, App.makeResData(groupData, req.body));
     });
 };

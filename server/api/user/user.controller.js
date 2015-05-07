@@ -74,7 +74,7 @@ exports.login = function(req, res) {
 
 exports.auto = function(req, res) {
   var data = App.receiveReqData(req.body);
-  User.findById(data.id, function(err, user) {
+  User.findOne({ uuid: req.body.data.common.token }, function(err, user) {
     if (err) { return handleError(res, err, req.body); }
     if (!user) {
       return res.json(200, App.makeResData({result: config.api.result.error}, req.body));
@@ -86,6 +86,17 @@ exports.auto = function(req, res) {
       user: user
     };
     return res.json(200, App.makeResData(userData, req.body));
+  });
+};
+
+exports.checkEmail = function(req, res) {
+  var data = App.receiveReqData(req.body);
+  User.count({email: data.email}, function(err, count) {
+    if (err) { return handleError(res, err, req.body); }
+    if (count !== 0) {
+      return res.json(200, App.makeResData({result: config.api.result.error}, req.body));
+    }
+    return res.json(200, App.makeResData({result: config.api.result.success}, req.body));
   });
 };
 
