@@ -1,4 +1,4 @@
-// グループの中からリーダーを1人選び, DBに保存するバッチスクリプト
+// チャットワークAPIでグループが決定したことを通知するスクリプト
 
 var request = require('request');
 var batchFile = require('./../batch');
