@@ -2,9 +2,9 @@
 
 var _ = require('lodash');
 var moment = require('moment');
-var App = require('../app/app.model');
 var config = require('../../config/environment/');
 var Attend = require('./attend.model');
+var AppController = require('../app/app.controller');
 
 // Get list of attends
 exports.show = function(req, res) {
@@ -18,7 +18,7 @@ exports.show = function(req, res) {
 
   // 来月の参加しない状態（active: false）のレコード件数を取得
   Attend.count(data, function (err, count) {
-    if(err) { return handleError(res, err, req.body); }
+    if(err) { return AppController.prototype.handleError(res, err, req.body); }
     if(count === 0) { return res.json(200, {result: config.api.attend.yes}); } // 参加
     return res.json(200, {result: config.api.attend.no}); // 不参加
   });
@@ -26,7 +26,7 @@ exports.show = function(req, res) {
 
 // Upsert a  attend in the DB.
 exports.upsert = function(req, res) {
-  var reqData = App.receiveReqData(req.body);
+  var reqData = AppController.prototype.receiveReqData(req.body);
   var jtime = moment().utc().add(9, 'hours').add(1, 'months');
   var data = {
     user_id: reqData.id,
@@ -38,12 +38,8 @@ exports.upsert = function(req, res) {
   var changedStatus = (reqData.status === config.api.attend.yes) ? false : true;
 
   Attend.update(data, {$set: {active: changedStatus}}, {upsert: true, multi: false}, function(err, attend) {
-    if(err) { return handleError(res, err, req.body); }
+    if(err) { return AppController.prototype.handleError(res, err, req.body); }
     var resData = {result: reqData.status};
-    return res.json(200, App.makeResData(resData, req.body));
+    return res.json(200, AppController.prototype.makeResData(resData, req.body));
   });
 };
-
-function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
-}
