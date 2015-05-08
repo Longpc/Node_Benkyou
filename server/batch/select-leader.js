@@ -6,12 +6,12 @@ var batch = require('../batch.js').batch;
 var User = require('../api/user/user.model');
 var Group = require('../api/group/group.model');
 
-var startOfMonth = moment().utc().add(9, 'hours').startOf('month');
-var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
+var startOfMonth = moment().startOf('month');
+var endOfMonth = moment().endOf('month');
 
 // 今月のグループを取得
 exports.selectLeader = function(messageFunction, done) {
-  Group.find({date: {$gt: startOfMonth}, date: {$lt: endOfMonth}}, function(err, groups) {
+  Group.find({created_at: {$gt: startOfMonth, $lt: endOfMonth}}, function(err, groups) {
     if (err) { console.log(err); }
     async.each(groups, function(group, callback) {
       var minCount = 10000;

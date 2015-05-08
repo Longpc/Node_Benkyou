@@ -53,16 +53,19 @@ exports.info = function(req, res) {
         if (blogs[i].comment.length > 20) { blogs[i].comment.substr(0, 20); }
       });
 
-      var jtime = moment().utc().add(9, 'hours').add(1, 'months');
+      var startOfMonth = moment().startOf('month');
+      var endOfMonth = moment().endOf('month');
       var query = {
         user_id: data.id,
-        active: false,
-        year: jtime.year(),
-        month: jtime.month() + 1
+        disabled: false,
+        created_at: {
+          $gt: startOfMonth,
+          $lt: endOfMonth
+        }
       };
 
       // 来月の参加しない状態（active: false）のレコード件数を取得
-      Attend.count(data, function (err, count) {
+      Attend.count(query, function (err, count) {
         if(err) { return AppController.prototype.handleError(res, err, req.body); }
         var result = (count === 0) ? config.api.attend.yes : config.api.attend.no;
         var resData = {

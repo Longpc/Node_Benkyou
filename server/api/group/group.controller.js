@@ -14,7 +14,7 @@ exports.show = function(req, res) {
   var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
   var data = {
     user_ids: reqData.id,
-    date: {
+    created_at: {
       "$gte": startOfMonth,
       "$lte": endOfMonth
     }

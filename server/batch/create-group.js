@@ -20,9 +20,12 @@ var jtime = moment().utc().add(9, 'hours');
 var year = jtime.year();
 var month = jtime.month() + 1;
 
+var startOfLastMonth = moment().subtract(1, 'month').startOf('month');
+var endOfLastMonth = moment().subtract(1, 'month').endOf('month');
+
 // 参加するユーザ一覧を取得する関数
 exports.createGroup = function(leaderFunction, messageFunction, done) {
-  Attend.find({active: false, year: year, month: month}, function(err, attends) {
+  Attend.find({disabled: false, created_at: {$gt: startOfLastMonth, $lt: endOfLastMonth}}, function(err, attends) {
     notAttendIds = attends.map(function(v) { return v.user_id; });
     User.find({_id: { $nin: notAttendIds }}, null, { timeout: false }, function(err, users) {
       var minCost = 1000000;
@@ -48,7 +51,6 @@ exports.createGroup = function(leaderFunction, messageFunction, done) {
       async.each(bestGroup, function(group, callback) {
         var userIds = group.map(function(v) { return v.id; });
         var newGroup = {
-          date: jtime,
           user_ids: userIds
         };
         Group.create(newGroup, function(err, group) {
