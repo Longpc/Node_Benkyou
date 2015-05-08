@@ -3,18 +3,19 @@
 var _ = require('lodash');
 var multiparty = require('multiparty');
 var fs = require('fs')
-var Puid = require('puid');
 var config = require('../../config/environment/');
-var App = require('../app/app.model');
+var Puid = require('puid');
 var Blog = require('./blog.model');
+var AppController = require('../app/app.controller');
 
 // Get list of blogs
 exports.index = function(req, res) {
   Blog.find()
     .populate('user_id', 'name')
+    .sort({ created_at: -1 }).limit(10)
     .exec(function (err, blogs) {
-      if(err) { return handleError(res, err, req.body); }
-      return res.json(200, App.makeResData(blogs, req.body));
+      if(err) { return AppController.prototype.handleError(res, err, req.body); }
+      return res.json(200, AppController.prototype.makeResData(blogs, req.body));
     });
 };
 
@@ -23,13 +24,13 @@ exports.show = function(req, res) {
   Blog.findById(req.params.id)
     .populate('user_id', 'name')
     .exec(function (err, blog) {
-      if(err) { return handleError(res, err, req.body); }
-      if(!blog) { return res.json(404, App.makeResData({result: config.api.result.error}, req.body)); }
+      if(err) { return AppController.prototype.handleError(res, err, req.body); }
+      if(!blog) { return res.json(404, AppController.prototype.makeResData({result: config.api.result.error}, req.body)); }
       var data = {
         result: config.api.result.success,
         blog: blog
       };
-      return res.json(200, App.makeResData(data, req.body));
+      return res.json(200, AppController.prototype.makeResData(data, req.body));
     });
 };
 
@@ -68,7 +69,7 @@ exports.create = function(req, res) {
 };
 
 exports.createNative = function(req, res) {
-  var data = App.receiveReqData(req.body);
+  var data = AppController.prototype.receiveReqData(req.body);
   var puid = new Puid('sl');
   var filename = puid.generate();
   var buffer = new Buffer(data.file, 'base64')
@@ -82,11 +83,7 @@ exports.createNative = function(req, res) {
         result: config.api.result.success,
         blog: blog
       };
-      return res.json(201, App.makeResData(result, req.body));
+      return res.json(201, AppController.prototype.makeResData(result, req.body));
     });
   });
 };
-
-function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
-}

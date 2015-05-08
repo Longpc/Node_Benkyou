@@ -16,5 +16,6 @@ router.post('/logout', controller.logout);
 
 // native only
 router.post('/auto', controller.auto);
+router.post('/check_email', controller.checkEmail);
 
 module.exports = router;
