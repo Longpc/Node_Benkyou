@@ -3,13 +3,13 @@
 var _ = require('lodash');
 var moment = require('moment');
 var config = require('../../config/environment/');
-var App = require('../app/app.model');
 var Group = require('./group.model');
 var User = require('../user/user.model');
+var AppController = require('../app/app.controller');
 
 // Get a single group
 exports.show = function(req, res) {
-  var reqData = App.receiveReqData(req.body);
+  var reqData = AppController.prototype.receiveReqData(req.body);
   var startOfMonth = moment().utc().add(9, 'hours').startOf('month');
   var endOfMonth = moment().utc().add(9, 'hours').endOf('month');
   var data = {
@@ -39,10 +39,6 @@ exports.show = function(req, res) {
           result: config.api.result.error
         };
       }
-      return res.json(200, App.makeResData(groupData, req.body));
+      return res.json(200, AppController.prototype.makeResData(groupData, req.body));
     });
 };
-
-function handleError(res, err, reqBody) {
-  return res.json(500, App.makeResData(err, reqBody, config.api.code.error));
-}
