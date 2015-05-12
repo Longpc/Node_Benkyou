@@ -25,7 +25,7 @@ exports.show = function(req, res) {
     .populate('user_ids')
     .exec(function (err, group) {
       var groupData;
-      if(err) { return handleError(res, err, req.body); }
+      if(err) { return AppController.prototype.handleError(res, err, req.body); }
       if (group) {
         group.user_ids.forEach(function(m, i) {
           if (m.id === group.leader_id.id) { group.user_ids.splice(i, 1); }
