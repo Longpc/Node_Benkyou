@@ -9,12 +9,12 @@ var AppController = require('../app/app.controller');
 exports.create = function(req, res) {
   var data = AppController.prototype.receiveReqData(req.body);
   User.count({email: data.user.email}, function(err, count) {
-    if(err) { return handleError(res, err, req.body); }
+    if(err) { return AppController.prototype.handleError(res, err, req.body); }
     if (count !== 0) { return res.json(200, AppController.prototype.makeResData({result: config.api.result.email}, req.body)); }
 
     data.user.password = User.createHash(data.user.password);
     User.create(data.user, function(err, user) {
-      if(err) { return handleError(res, err, req.body); }
+      if(err) { return AppController.prototype.handleError(res, err, req.body); }
       req.session.user = user;
       var userData = {
         result: config.api.result.success,
@@ -31,11 +31,11 @@ exports.update = function(req, res) {
   if(data._id) { delete data._id; }
 
   User.findById(req.params.id, function (err, user) {
-    if (err) { return handleError(res, err, req.body); }
-    if (!user) { return handleError(res, err, req.body); }
+    if (err) { return AppController.prototype.handleError(res, err, req.body); }
+    if (!user) { return AppController.prototype.handleError(res, err, req.body); }
     var updated = _.merge(user, data);
     updated.save(function (err) {
-      if (err) { return handleError(res, err, req.body); }
+      if (err) { return AppController.prototype.handleError(res, err, req.body); }
       req.session.user = user;
       var userData = {
         result: config.api.result.success,
@@ -58,7 +58,7 @@ exports.islogged = function(req, res) {
 exports.login = function(req, res) {
   var data = AppController.prototype.receiveReqData(req.body);
   User.findOne({email: data.email, password: User.createHash(data.password)}, function(err, user) {
-    if (err) { return handleError(res, err, req.body); }
+    if (err) { return AppController.prototype.handleError(res, err, req.body); }
     if (!user) {
       return res.json(200, AppController.prototype.makeResData({result: config.api.result.password}, req.body));
     }
@@ -75,7 +75,7 @@ exports.login = function(req, res) {
 exports.auto = function(req, res) {
   var data = AppController.prototype.receiveReqData(req.body);
   User.findOne({ uuid: req.body.data.common.token }, function(err, user) {
-    if (err) { return handleError(res, err, req.body); }
+    if (err) { return AppController.prototype.handleError(res, err, req.body); }
     if (!user) {
       return res.json(200, AppController.prototype.makeResData({result: config.api.result.error}, req.body));
     }
@@ -92,7 +92,7 @@ exports.auto = function(req, res) {
 exports.checkEmail = function(req, res) {
   var data = AppController.prototype.receiveReqData(req.body);
   User.count({email: data.email}, function(err, count) {
-    if (err) { return handleError(res, err, req.body); }
+    if (err) { return AppController.prototype.handleError(res, err, req.body); }
     if (count !== 0) {
       return res.json(200, AppController.prototype.makeResData({result: config.api.result.error}, req.body));
     }
